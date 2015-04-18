@@ -40,7 +40,8 @@
 <link
 	href="bootstrap/bower_components/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet" type="text/css">
-<link href="bootstrap/dist/css/xcharts.min.css" rel="stylesheet" type="text/css">
+<link href="bootstrap/dist/css/xcharts.min.css" rel="stylesheet"
+	type="text/css">
 
 <script type="text/javascript" src="bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -67,17 +68,17 @@
 		});
 	});
 </script>
-<script>
-function myFunction(id) {
-    document.getElementById("demo").innerHTML = id;
-  $.ajax({type:'POST', 
-	  			data:{'monthId':id},
-                url:CTM/RaglanRoadController/sortLineChartByMonth,
-                success:function(data,textStatus){
-                     jQuery(updateDiv).html(data);
-                }
-        });
-}
+<script type="text/javascript">
+	function doAjax(x) {
+		$.ajax({
+			type: "POST",
+			url : 'month.html',
+			data : ({ val : x }),
+			success : function(data) {
+				$('#month').html(data);
+			}
+		});
+	}
 </script>
 </head>
 
@@ -105,12 +106,12 @@ function myFunction(id) {
 						<ul class="nav navbar-nav navbar-right">
 							<li class="dropdown"><a class="dropdown-toggle"
 								role="button" data-toggle="dropdown"><i
-									class="glyphicon glyphicon-user"></i>
-									${sessionScope.user.firstName} <span class="caret"></span></a>
+									class="glyphicon glyphicon-user"></i>${sessionScope.user.firstName} <span class="caret"></span></a>
 								<ul class="dropdown-menu" role="menu">
 									<li><a href="profile.html">My Profile</a></li>
 									<li><a href="updateBalance.html">Add To Wallet</a></li>
-									<li><a href="" data-target="#addCash" data-toggle="modal">Invest in Raglan Road</a></li>
+									<li><a href="" data-target="#addCash" data-toggle="modal">Invest
+											in Lucayan</a></li>
 								</ul></li>
 							<li><a href="#">Wallet: <i
 									class="glyphicon glyphicon-euro"></i>${sessionScope.user.account.balance}</a></li>
@@ -123,19 +124,17 @@ function myFunction(id) {
 		</nav>
 	</div>
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col-lg-12">
-				<h1 class="page-header">${sessionScope.strategy.name}</h1>
-			</div>
-			<!-- /.col-lg-12 -->
-		</div>
 		<!-- /.row -->
 		<!-- /.row -->
 		<div class="row">
-			<div class="col-lg-7">
+			<div class="col-lg-6">
+				<h3>
+					<i class="glyphicon glyphicon-briefcase"></i> Toolbox
+				</h3>
+				<hr>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<i class="fa fa-bar-chart-o fa-fw"></i> Raglan Road ROI
+						<i class="fa fa-line-chart fa-fw"></i> Lucayan ROI
 						<div class="pull-right">
 							<div class="btn-group">
 								<button type="button"
@@ -143,26 +142,27 @@ function myFunction(id) {
 									data-toggle="dropdown">
 									Month <span class="caret"></span>
 								</button>
-									<ul class="dropdown-menu pull-right" role="menu">
-									<li><a onclick="myFunction(1)" >January</a></li>
-									<li><a href="#">February</a></li>
-									<li><a href="#">March</a></li>
-									<li><a href="#">April</a></li>
-									<li><a href="#">May</a></li>
-									<li><a href="#">June</a></li>
-									<li><a href="#">July</a></li>
-									<li><a href="#">August</a></li>
-									<li><a href="#">September</a></li>
-									<li><a href="#">October</a></li>
-									<li><a href="#">November</a></li>
-									<li><a href="#">December</a></li>
+								<ul class="dropdown-menu pull-right" role="menu">
+									<li><a href="<c:url value="/updateLucayanLineChart/0.html" />">January</a></li>
+									<li><a href="<c:url value="/updateLucayanLineChart/1.html" />">February</a></li>
+									<li><a href="<c:url value="/updateLucayanLineChart/2.html" />">March</a></li>
+									<li><a href="<c:url value="/updateLucayanLineChart/3.html" />">April</a></li>
+									<li><a href="<c:url value="/updateLucayanLineChart/4.html" />">May</a></li>
+									<li><a href="<c:url value="/updateLucayanLineChart/5.html" />">June</a></li>
+									<li><a href="<c:url value="/updateLucayanLineChart/6.html" />">July</a></li>
+									<li><a href="<c:url value="/updateLucayanLineChart/7.html" />">August</a></li>
+									<li><a href="<c:url value="/updateLucayanLineChart/8.html" />">September</a></li>
+									<li><a href="<c:url value="/updateLucayanLineChart/9.html" />">October</a></li>
+									<li><a href="<c:url value="/updateLucayanLineChart/10.html" />">November</a></li>
+									<li><a href="<c:url value="/updateLucayanLineChart/11.html" />">December</a></li>
 								</ul>
 							</div>
 						</div>
 					</div>
 					<!-- /.panel-heading -->
 					<div class="panel-body">
-						<img align="bottom" alt="Google Pie Chart" src="${lineChart}" width="700px" />
+						<img align="bottom" alt="Google Pie Chart" src="${lucLineChart}"
+							width="610px" />
 					</div>
 					<!-- /.panel-body -->
 				</div>
@@ -198,6 +198,8 @@ function myFunction(id) {
 											<th>Horse Name</th>
 											<th>Date & Time</th>
 											<th>Price</th>
+											<th>Side</th>
+											<th>Liability</th>
 											<th>Return per €100</th>
 										</tr>
 									</thead>
@@ -206,10 +208,14 @@ function myFunction(id) {
 											<c:if test="${sessionScope != null}">
 
 												<tr>
-													<td><c:out value="${list.raceName}" /></td>
+													<td><a target="_blank"
+														href="https://www.betfair.com/exchange/plus/#/horse-racing/market/${list.marketId }"><c:out
+																value="${list.raceName}" /></a></td>
 													<td><c:out value="${list.horseName}" /></td>
 													<td><c:out value="${list.date}" /></td>
 													<td><c:out value="${list.price}" /></td>
+													<td><c:out value="${list.side}" /></td>
+													<td><c:out value="${list.liability}" /></td>
 													<td><c:out value="${list.expWinnings}" /></td>
 												</tr>
 
@@ -268,67 +274,95 @@ function myFunction(id) {
 					</div>
 					<!-- /.panel-heading -->
 					<div class="panel-body">
-						<img alt="Return Pie Chart" src="${pieChart}" width="700px" />
+						<img alt="Return Pie Chart" src="${pieChart}" width="610px" />
 					</div>
 					<!-- /.panel-body -->
 				</div>
 				<!-- /.panel -->
 			</div>
 			<!-- /.col-lg-8 -->
-			<div class="col-lg-5">
+			<div class="col-lg-6">
+				<h3>
+					<i class="glyphicon glyphicon-briefcase"></i> Toolbox
+				</h3>
+				<hr>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<i class="fa fa-user fa-fw"></i> Personal Panel
+						<i class="fa fa-bar-chart fa-fw"></i> Lucayan Information
 					</div>
 					<!-- /.panel-heading -->
 					<div class="panel-body">
 						<div class="list-group">
 							<a href="#" class="list-group-item"> <i
-								class="fa fa-comment fa-fw"></i>${sessionScope.user.firstName} ${sessionScope.user.lastName}<span
-								class="pull-right text-muted small"><em>4 minutes
-										ago</em> </span>
+								class="fa fa-user fa-fw"></i>Amount you have invested: <span
+								class="pull-right text-muted small">
+									€${sessionScope.user.account.lucayan}</span>
 							</a> <a href="#" class="list-group-item"> <i
-								class="fa fa-twitter fa-fw"></i> 3 New Followers <span
-								class="pull-right text-muted small"><em>12 minutes
-										ago</em> </span>
+								class="fa fa-user fa-fw"></i>Date you invested: <span
+								class="pull-right text-muted small">
+									${signUpDate}</span>
+							</a><a href="#" class="list-group-item"> <i
+								class="fa fa-user fa-fw"></i> Your total return to date: <span
+								class="pull-right text-muted small">€${totalUserReturn}</span>
 							</a> <a href="#" class="list-group-item"> <i
-								class="fa fa-envelope fa-fw"></i> Message Sent <span
-								class="pull-right text-muted small"><em>27 minutes
-										ago</em> </span>
+								class="fa fa-users fa-fw"></i> Total number of investors: <span
+								class="pull-right text-muted small">${lucayanSubscribers }
+							</span>
 							</a> <a href="#" class="list-group-item"> <i
-								class="fa fa-tasks fa-fw"></i> New Task <span
-								class="pull-right text-muted small"><em>43 minutes
-										ago</em> </span>
+								class="fa fa-money fa-fw"></i> Total pool: <span
+								class="pull-right text-muted small">
+									€${sessionScope.strategy.pool}</span>
 							</a> <a href="#" class="list-group-item"> <i
-								class="fa fa-upload fa-fw"></i> Server Rebooted <span
-								class="pull-right text-muted small"><em>11:32 AM</em> </span>
-							</a> <a href="#" class="list-group-item"> <i
-								class="fa fa-bolt fa-fw"></i> Server Crashed! <span
-								class="pull-right text-muted small"><em>11:13 AM</em> </span>
-							</a> <a href="#" class="list-group-item"> <i
-								class="fa fa-warning fa-fw"></i> Server Not Responding <span
-								class="pull-right text-muted small"><em>10:57 AM</em> </span>
-							</a> <a href="#" class="list-group-item"> <i
-								class="fa fa-shopping-cart fa-fw"></i> New Order Placed <span
-								class="pull-right text-muted small"><em>9:49 AM</em> </span>
-							</a> <a href="#" class="list-group-item"> <i
-								class="fa fa-money fa-fw"></i> Payment Received <span
-								class="pull-right text-muted small"><em>Yesterday</em> </span>
+								class="fa fa-money fa-fw"></i> Total return to date: <span
+								class="pull-right text-muted small">€${totalReturn}</span>
 							</a>
 						</div>
 						<!-- /.list-group -->
-						<a href="#" class="btn btn-default btn-block">View All Alerts</a>
 					</div>
 					<!-- /.panel-body -->
 				</div>
 				<!-- /.panel -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<i class="fa fa-bar-chart-o fa-fw"></i> Donut Chart Example
+						<i class="fa fa-bar-chart-o fa-fw"></i>Your Monthly returns
+						<div class="pull-right">
+							<div class="btn-group">
+								<button type="button"
+									class="btn btn-default btn-xs dropdown-toggle"
+									data-toggle="dropdown">
+									Month <span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu pull-right" role="menu">
+									<li><a href="<c:url value="/lucBarChartMonth/0.html" />">January</a></li>
+									<li><a href="<c:url value="/lucBarChartMonth/1.html" />">February</a></li>
+									<li><a href="<c:url value="/lucBarChartMonth/2.html" />">March</a></li>
+									<li><a href="<c:url value="/lucBarChartMonth/3.html" />">April</a></li>
+									<li><a href="<c:url value="/lucBarChartMonth/4.html" />">May</a></li>
+									<li><a href="<c:url value="/lucBarChartMonth/5.html" />">June</a></li>
+									<li><a href="<c:url value="/lucBarChartMonth/6.html" />">July</a></li>
+									<li><a href="<c:url value="/lucBarChartMonth/7.html" />">August</a></li>
+									<li><a href="<c:url value="/lucBarChartMonth/8.html" />">September</a></li>
+									<li><a href="<c:url value="/lucBarChartMonth/9.html" />">October</a></li>
+									<li><a href="<c:url value="/lucBarChartMonth/10.html" />">November</a></li>
+									<li><a href="<c:url value="/lucBarChartMonth/11.html" />">December</a></li>
+								</ul>
+							</div>
+						</div>
 					</div>
 					<div class="panel-body">
 						<div id="morris-donut-chart"></div>
-						<a href="#" class="btn btn-default btn-block">View Details</a>
+						<img alt="Google Pie Chart" src="${lucBarChart}" width="610px" />
+					</div>
+					<!-- /.panel-body -->
+				</div>
+				<!-- /.panel -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<i class="fa fa-line-chart fa-fw"></i>Strategy Performance
+						Comparison
+					</div>
+					<div class="panel-body">
+						<div id="morris-donut-chart"></div>
 					</div>
 					<!-- /.panel-body -->
 				</div>
@@ -365,8 +399,6 @@ function myFunction(id) {
 					<div class="panel-body">
 						<ul class="chat">
 							<li class="left clearfix"><span class="chat-img pull-left">
-									<img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar"
-									class="img-circle" />
 							</span>
 								<div class="chat-body clearfix">
 									<div class="header">
@@ -379,25 +411,7 @@ function myFunction(id) {
 										Curabitur bibendum ornare dolor, quis ullamcorper ligula
 										sodales.</p>
 								</div></li>
-							<li class="right clearfix"><span class="chat-img pull-right">
-									<img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar"
-									class="img-circle" />
-							</span>
-								<div class="chat-body clearfix">
-									<div class="header">
-										<small class=" text-muted"> <i
-											class="fa fa-clock-o fa-fw"></i> 13 mins ago
-										</small> <strong class="pull-right primary-font">Bhaumik
-											Patel</strong>
-									</div>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-										Curabitur bibendum ornare dolor, quis ullamcorper ligula
-										sodales.</p>
-								</div></li>
-							<li class="left clearfix"><span class="chat-img pull-left">
-									<img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar"
-									class="img-circle" />
-							</span>
+							<li class="left clearfix">
 								<div class="chat-body clearfix">
 									<div class="header">
 										<strong class="primary-font">Jack Sparrow</strong> <small
@@ -408,22 +422,21 @@ function myFunction(id) {
 									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 										Curabitur bibendum ornare dolor, quis ullamcorper ligula
 										sodales.</p>
-								</div></li>
-							<li class="right clearfix"><span class="chat-img pull-right">
-									<img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar"
-									class="img-circle" />
-							</span>
+								</div>
+							</li>
+							<li class="left clearfix">
 								<div class="chat-body clearfix">
 									<div class="header">
-										<small class=" text-muted"> <i
-											class="fa fa-clock-o fa-fw"></i> 15 mins ago
-										</small> <strong class="pull-right primary-font">Bhaumik
-											Patel</strong>
+										<strong class="primary-font">Jack Sparrow</strong> <small
+											class="pull-right text-muted"> <i
+											class="fa fa-clock-o fa-fw"></i> 14 mins ago
+										</small>
 									</div>
 									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 										Curabitur bibendum ornare dolor, quis ullamcorper ligula
 										sodales.</p>
-								</div></li>
+								</div>
+							</li>
 						</ul>
 					</div>
 					<!-- /.panel-body -->

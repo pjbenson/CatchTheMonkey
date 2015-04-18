@@ -9,6 +9,7 @@ public class UserUIObject {
 	private String horseName;
 	private Date date;
 	private Double price;
+	private String side;
 	private Double expWinnings;
 	private Double liability;
 	
@@ -53,6 +54,12 @@ public class UserUIObject {
 	}
 	public void setLiability(Double liability) {
 		this.liability = liability;
+	}
+	public String getSide() {
+		return side;
+	}
+	public void setSide(String side) {
+		this.side = side;
 	}
 
 }

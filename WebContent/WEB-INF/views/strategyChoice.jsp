@@ -109,7 +109,7 @@ body {
 						<div id="navbar" class="navbar-collapse collapse">
 							<ul class="nav navbar-nav">
 								<li><a href="index.html">Home</a></li>
-								<li><a href="#contact">Contact</a></li>
+								<li><a href="contact.html">Contact</a></li>
 							</ul>
 							<c:if test="${not empty sessionScope.user.firstName}">
 								<ul class="nav navbar-nav navbar-right">
@@ -158,12 +158,21 @@ body {
 				<p>Raglan road is a high risk/high reward strategy that parses
 					and process very specific data obtained from the Betfair exchange
 					and seeks to make profit through a range of high risk positions.</p>
-				<c:if test="${empty raglanroad}">
-					<form:form method="POST" action="/CTM/strategy1.html">
-						<input type="submit" value="Register"
-							class="btn btn-large btn-success" />
-					</form:form>
-				</c:if>
+				<c:choose>
+					<c:when test="${empty sessionScope.user}">
+						<p>
+							<a class="btn btn-large btn-success" href="register.html"
+								role="button">Register today</a>
+						</p>
+					</c:when>
+					<c:otherwise>
+						<form:form method="POST" action="/CTM/strategy1.html">
+							<input type="submit" value="Invest"
+								class="btn btn-large btn-success" />
+						</form:form>
+					</c:otherwise>
+				</c:choose>
+
 			</div>
 			<div class="span4">
 				<h2>Ginger Mc</h2>
@@ -171,12 +180,20 @@ body {
 					dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
 					ut fermentum massa justo sit amet risus. Etiam porta sem malesuada
 					magna mollis euismod. Donec sed odio dui.</p>
-				<c:if test="${empty gingermc}">
-					<form:form method="POST" action="/CTM/strategy2.html">
-						<input type="submit" value="Register"
-							class="btn btn-large btn-success" />
-					</form:form>
-				</c:if>
+				<c:choose>
+					<c:when test="${empty sessionScope.user}">
+						<p>
+							<a class="btn btn-large btn-success" href="register.html"
+								role="button">Register today</a>
+						</p>
+					</c:when>
+					<c:otherwise>
+						<form:form method="POST" action="/CTM/strategy2.html">
+							<input type="submit" value="Invest"
+								class="btn btn-large btn-success" />
+						</form:form>
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<div class="span4">
 				<h2>Lucayan</h2>
@@ -184,12 +201,20 @@ body {
 					egestas eget quam. Vestibulum id ligula porta felis euismod semper.
 					Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
 					nibh, ut fermentum massa.</p>
-				<c:if test="${empty lucayan}">
-					<form:form method="POST" action="/CTM/strategy3.html">
-						<input type="submit" value="Register"
-							class="btn btn-large btn-success" />
-					</form:form>
-				</c:if>
+				<c:choose>
+					<c:when test="${empty sessionScope.user}">
+						<p>
+							<a class="btn btn-large btn-success" href="register.html"
+								role="button">Register today</a>
+						</p>
+					</c:when>
+					<c:otherwise>
+						<form:form method="POST" action="/CTM/strategy3.html">
+							<input type="submit" value="Invest"
+								class="btn btn-large btn-success" />
+						</form:form>
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</div>
 

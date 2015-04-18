@@ -91,7 +91,7 @@ footer {
 					</div>
 					<div id="navbar" class="navbar-collapse collapse">
 						<ul class="nav navbar-nav">
-							<li class="active"><a href="index.html">Home</a></li>
+							<li class="active"><a href="">Profile</a></li>
 							<li><a href="#contact">Contact</a></li>
 							<li class="dropdown"><a href="#" class="dropdown-toggle"
 								data-toggle="dropdown" role="button" aria-expanded="false">Options
@@ -163,26 +163,25 @@ footer {
 								</div>
 							</c:if>
 							<!--/col-->
+							<c:if test="${not empty lucayan}">
+								<div class="col-xs-12 col-sm-4">
+									<h2>
+										<strong><i class="glyphicon glyphicon-euro"></i>${lucayan}</strong>
+									</h2>
+									<a class="btn btn-primary btn-block" href="lucayan.html"
+										role="button">Lucayan</a>
+								</div>
+							</c:if>
+							<!--/col-->
 							<c:if test="${not empty gingermc}">
 								<div class="col-xs-12 col-sm-4">
 									<h2>
 										<strong><i class="glyphicon glyphicon-euro"></i>${gingermc}</strong>
 									</h2>
 									<a class="btn btn-info btn-block" href="gingermc.html"
-										role="button">Ginger Mc</a>
+										role="button">GingerMc</a>
 								</div>
 							</c:if>
-							<!--/col-->
-							<c:if test="${not empty lucayan}">
-								<div class="col-xs-12 col-sm-4">
-									<h2>
-										<strong><i class="glyphicon glyphicon-euro"></i>${lucayan}</strong>
-									</h2>
-									<a class="btn btn-primary btn-block" href="raglanroad.html"
-										role="button">Lucayan</a>
-								</div>
-							</c:if>
-							<!--/col-->
 						</div>
 						<!--/row-->
 					</div>

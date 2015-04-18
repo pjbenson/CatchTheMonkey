@@ -19,13 +19,12 @@ public class RunnerDAOImpl implements RunnerDAO {
 		List<Runner> list = getRunnersList();
 		Runner r = null;
 		for(Runner runner: list){
-			System.out.println(runner.getSelectionId() +":"+ selectionID);
 			if(runner.getSelectionId()==selectionID){
-				System.out.println("MATCH");
 				r = runner;
 			}
 		}
 		return r;
+		//return (Runner) sessionFactory.getCurrentSession().get(Runner.class, selectionID);
 	}
 
 	@SuppressWarnings("unchecked")

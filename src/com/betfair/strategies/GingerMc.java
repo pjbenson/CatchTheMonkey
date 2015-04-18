@@ -58,7 +58,6 @@ public class GingerMc implements IStrategy {
 	@Override
 	public void strategyCalculation() throws APINGException, ParseException {
 		List<MarketBook> marketBooks = getMarketPrices();
-		List<PlaceInstruction> instructions = new ArrayList<PlaceInstruction>();
 		Double size = pool*.1;
 		int index = 0;
 
@@ -69,8 +68,9 @@ public class GingerMc implements IStrategy {
 
 		for(MarketBook mktBook: marketBooks){
 			for(Runner runner: mktBook.getRunners()){
-				if(runner.getSelectionId().equals(selectionIds.get(index)) && !runner.getStatus().equals("REMOVED")){
+				if(mktBook.getRunners().get(0) == runner && selectionIds.contains(runner.getSelectionId()) && !runner.getStatus().equals("REMOVED")){
 					PlaceInstruction instruction = new PlaceInstruction();
+					List<PlaceInstruction> instructions = new ArrayList<PlaceInstruction>();
 					instruction.setSelectionId(runner.getSelectionId());
 					instruction.setSide(Side.LAY);
 					instruction.setHandicap(0);
@@ -81,7 +81,7 @@ public class GingerMc implements IStrategy {
 					limitOrder.setPersistenceType(PersistenceType.LAPSE);
 					instruction.setLimitOrder(limitOrder);
 					instructions.add(instruction);
-					
+
 					Order order = generateOrder(size, runner, instruction);
 					persister.persistOrder(order);
 					runner.addOrder(order);
@@ -97,7 +97,7 @@ public class GingerMc implements IStrategy {
 					}
 				}
 			}
-			index++;
+
 		}
 		persister.closeResources();
 	}
@@ -122,7 +122,7 @@ public class GingerMc implements IStrategy {
 		priceProjection.addPriceData(PriceData.EX_BEST_OFFERS);
 		int index = 0;
 		for(MarketCatalogue market: markets){
-			if(isChosenRunnerPresent(market.getRunners())){
+			if(isChosenRunnerPresent(market.getRunners().get(0))){
 				marketIds.add(market.getMarketId());
 				persister.persistMarketCatalogue(market, 2, selectionIds.get(index));
 				index++;
@@ -132,28 +132,33 @@ public class GingerMc implements IStrategy {
 		return dataSource.listMarketBook(marketIds, priceProjection, OrderProjection.EXECUTABLE);
 	}
 
-	private boolean isChosenRunnerPresent(List<RunnerCatalogue> runners){
+	private boolean isChosenRunnerPresent(RunnerCatalogue runner){
 		boolean found = false;
-		for(RunnerCatalogue runner: runners){
-			for (Entry<String, String> entry : runner.getMetadata().entrySet()){
-				if(entry.getKey().contains("FORM")){
-					String form = entry.getValue();
-					if(form != null && form.charAt(form.length()-1) == '2'){
-						//TODO add multiple runners in the same race 
-						selectionIds.add(runner.getSelectionId());
-						persister.persistRunnerCatalogue(runner);
-						return true;
-					}
+		
+		for (Entry<String, String> entry : runner.getMetadata().entrySet()){
+			if(entry.getKey().contains("FORM")){
+				String form = entry.getValue();
+				if(form != null && form.charAt(form.length()-1) == '2'){
+					//TODO add multiple runners in the same race 
+					selectionIds.add(runner.getSelectionId());
+					persister.persistRunnerCatalogue(runner);
+					found = true;
+				}
+				if(form != null && form.charAt(form.length()-1)=='-' && form.charAt(form.length()-2)=='2'){
+					selectionIds.add(runner.getSelectionId());
+					persister.persistRunnerCatalogue(runner);
+					found = true;
 				}
 			}
 		}
+
 		return found;
 	}
 
 	@Override
 	public List<MarketCatalogue> getListMarketCatalogue() throws APINGException, ParseException{
 		Date dt = new Date();
-		dt.setHours(17);
+		dt.setHours(21);
 		eventTypeIds.add("7");
 		countries.add("GB");
 		countries.add("IE");
@@ -172,7 +177,7 @@ public class GingerMc implements IStrategy {
 		List<MarketCatalogue> result = new ArrayList<MarketCatalogue>();
 
 		for(MarketCatalogue marketCatalogue: listMarketCatalogue){
-			if(marketCatalogue.getMarketName().contains("Mdn") && !marketCatalogue.getMarketName().contains("Hrd")){
+			if(marketCatalogue.getMarketName().contains("Mdn") && !marketCatalogue.getMarketName().contains("Hrd") && !marketCatalogue.getMarketName().contains("Chs")){
 				result.add(marketCatalogue);
 			}
 		}

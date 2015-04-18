@@ -111,7 +111,7 @@
 									<li><a href="profile.html">My Profile</a></li>
 									<li><a href="updateBalance.html">Add To Wallet</a></li>
 									<li><a href="" data-target="#addCash" data-toggle="modal">Invest
-											in Raglan Road</a></li>
+											in GingerMc</a></li>
 								</ul></li>
 							<li><a href="#">Wallet: <i
 									class="glyphicon glyphicon-euro"></i>${sessionScope.user.account.balance}</a></li>
@@ -125,18 +125,14 @@
 	</div>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-lg-12">
-				<h1 class="page-header">${sessionScope.strategy.name}</h1>
-			</div>
-			<!-- /.col-lg-12 -->
-		</div>
-		<!-- /.row -->
-		<!-- /.row -->
-		<div class="row">
 			<div class="col-lg-6">
+				<h3>
+					<i class="glyphicon glyphicon-briefcase"></i> Toolbox
+				</h3>
+				<hr>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<i class="fa fa-line-chart fa-fw"></i> Raglan Road ROI
+						<i class="fa fa-line-chart fa-fw"></i> GingerMc ROI
 						<div class="pull-right">
 							<div class="btn-group">
 								<button type="button"
@@ -145,25 +141,25 @@
 									Month <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu pull-right" role="menu">
-									<li><a onclick="doAjax(0)">January</a></li>
-									<li><a onclick="doAjax(1)">February</a></li>
-									<li><a onclick="doAjax(2)">March</a></li>
-									<li><a onclick="doAjax(3)">April</a></li>
-									<li><a onclick="doAjax(4)">May</a></li>
-									<li><a onclick="doAjax(5)">June</a></li>
-									<li><a onclick="doAjax(6)">July</a></li>
-									<li><a onclick="doAjax(7)">August</a></li>
-									<li><a onclick="doAjax(8)">September</a></li>
-									<li><a onclick="doAjax(9)">October</a></li>
-									<li><a onclick="doAjax(10)">November</a></li>
-									<li><a onclick="doAjax(11)">December</a></li>
+									<li><a href="<c:url value="/updateGingerMcLineChart/0.html" />">January</a></li>
+									<li><a href="<c:url value="/updateGingerMcLineChart/1.html" />">February</a></li>
+									<li><a href="<c:url value="/updateGingerMcLineChart/2.html" />">March</a></li>
+									<li><a href="<c:url value="/updateGingerMcLineChart/3.html" />">April</a></li>
+									<li><a href="<c:url value="/updateGingerMcLineChart/4.html" />">May</a></li>
+									<li><a href="<c:url value="/updateGingerMcLineChart/5.html" />">June</a></li>
+									<li><a href="<c:url value="/updateGingerMcLineChart/6.html" />">July</a></li>
+									<li><a href="<c:url value="/updateGingerMcLineChart/7.html" />">August</a></li>
+									<li><a href="<c:url value="/updateGingerMcLineChart/8.html" />">September</a></li>
+									<li><a href="<c:url value="/updateGingerMcLineChart/9.html" />">October</a></li>
+									<li><a href="<c:url value="/updateGingerMcLineChart/10.html" />">November</a></li>
+									<li><a href="<c:url value="/updateGingerMcLineChart/11.html" />">December</a></li>
 								</ul>
 							</div>
 						</div>
 					</div>
 					<!-- /.panel-heading -->
 					<div class="panel-body">
-						<img align="bottom" alt="Google Pie Chart" src="${lineChart}"
+						<img align="bottom" alt="Google Pie Chart" src="${gmLineChart}"
 							width="610px" />
 					</div>
 					<!-- /.panel-body -->
@@ -200,6 +196,7 @@
 											<th>Horse Name</th>
 											<th>Date & Time</th>
 											<th>Price</th>
+											<th>Side</th>
 											<th>Liability</th>
 											<th>Return per €100</th>
 										</tr>
@@ -215,6 +212,7 @@
 													<td><c:out value="${list.horseName}" /></td>
 													<td><c:out value="${list.date}" /></td>
 													<td><c:out value="${list.price}" /></td>
+													<td><c:out value="${list.side}" /></td>
 													<td><c:out value="${list.liability}" /></td>
 													<td><c:out value="${list.expWinnings}" /></td>
 												</tr>
@@ -281,10 +279,15 @@
 				<!-- /.panel -->
 			</div>
 			<!-- /.col-lg-8 -->
+			
 			<div class="col-lg-6">
+				<h3>
+					<i class="glyphicon glyphicon-briefcase"></i> Toolbox
+				</h3>
+				<hr>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<i class="fa fa-bar-chart fa-fw"></i> Raglan Road Information
+						<i class="fa fa-bar-chart fa-fw"></i> GingerMc Information
 					</div>
 					<!-- /.panel-heading -->
 					<div class="panel-body">
@@ -329,25 +332,25 @@
 									Month <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu pull-right" role="menu">
-									<li><a onclick="myFunction(1)">January</a></li>
-									<li><a href="#">February</a></li>
-									<li><a href="#">March</a></li>
-									<li><a href="#">April</a></li>
-									<li><a href="#">May</a></li>
-									<li><a href="#">June</a></li>
-									<li><a href="#">July</a></li>
-									<li><a href="#">August</a></li>
-									<li><a href="#">September</a></li>
-									<li><a href="#">October</a></li>
-									<li><a href="#">November</a></li>
-									<li><a href="#">December</a></li>
+									<li><a href="<c:url value="/gMcBarChartMonth/0.html" />">January</a></li>
+									<li><a href="<c:url value="/gMcBarChartMonth/1.html" />">February</a></li>
+									<li><a href="<c:url value="/gMcBarChartMonth/2.html" />">March</a></li>
+									<li><a href="<c:url value="/gMcBarChartMonth/3.html" />">April</a></li>
+									<li><a href="<c:url value="/gMcBarChartMonth/4.html" />">May</a></li>
+									<li><a href="<c:url value="/gMcBarChartMonth/5.html" />">June</a></li>
+									<li><a href="<c:url value="/gMcBarChartMonth/6.html" />">July</a></li>
+									<li><a href="<c:url value="/gMcBarChartMonth/7.html" />">August</a></li>
+									<li><a href="<c:url value="/gMcBarChartMonth/8.html" />">September</a></li>
+									<li><a href="<c:url value="/gMcBarChartMonth/9.html" />">October</a></li>
+									<li><a href="<c:url value="/gMcBarChartMonth/10.html" />">November</a></li>
+									<li><a href="<c:url value="/gMcBarChartMonth/11s.html" />">December</a></li>
 								</ul>
 							</div>
 						</div>
 					</div>
 					<div class="panel-body">
 						<div id="morris-donut-chart"></div>
-						<img alt="Google Pie Chart" src="${barChart}" width="610px" />
+						<img alt="Google Pie Chart" src="${gMcBarChart}" width="610px" />
 					</div>
 					<!-- /.panel-body -->
 				</div>

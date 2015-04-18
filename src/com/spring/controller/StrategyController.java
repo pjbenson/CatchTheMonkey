@@ -95,11 +95,16 @@ public class StrategyController {
 	public ModelAndView chooseStrategy1(@ModelAttribute("strategy") Strategy strategy, ModelMap model) throws ParseException {
 		ModelAndView modelAndView = new ModelAndView();
 		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		if(user.getAccount().getRaglanRegisterDate() != null){
+			return new ModelAndView("redirect:/raglanroad.html");
+		}
 		Account acc = accountService.getAccount(user.getAccount().getId());
+		acc.addToRaglanReturns(0.0);
 		Strategy strat = strategyService.getStrategy(1);
 		acc.setRaglanRegisterDate(getCurrentDate());
 		acc.addStrategy(strat);
 		strat.addAccount(acc);
+		
 		accountService.addStrategyToAccount(acc);
 		strategyService.addAccountToStrategy(strat);
 		model.put("raglanroad", strategy);
@@ -112,10 +117,14 @@ public class StrategyController {
 	public ModelAndView chooseStrategy2(@ModelAttribute("strategy") Strategy strategy, ModelMap model) throws ParseException {
 		ModelAndView modelAndView = new ModelAndView();
 		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		if(user.getAccount().getGingerRegisterDate() != null){
+			return new ModelAndView("redirect:/gingermc.html");
+		}
 		Account acc = accountService.getAccount(user.getAccount().getId());
 		Strategy strat = strategyService.getStrategy(2);
 		acc.setGingerRegisterDate(getCurrentDate());
 		acc.addStrategy(strat);
+		acc.addToGingermc(0.0);
 		strat.addAccount(acc);
 		accountService.addStrategyToAccount(acc);
 		strategyService.addAccountToStrategy(strat);
@@ -128,16 +137,20 @@ public class StrategyController {
 	public ModelAndView chooseStrategy3(@ModelAttribute("strategy") Strategy strategy, ModelMap model) throws ParseException {
 		ModelAndView modelAndView = new ModelAndView();
 		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		if(user.getAccount().getLucayanRegisterDate() != null){
+			return new ModelAndView("redirect:/lucayan.html");
+		}
 		Account acc = accountService.getAccount(user.getAccount().getId());
 		Strategy strat = strategyService.getStrategy(3);
 		acc.setLucayanRegisterDate(getCurrentDate());
 		acc.addStrategy(strat);
+		acc.addToLucayan(0.0);
 		strat.addAccount(acc);
 		accountService.addStrategyToAccount(acc);
 		strategyService.addAccountToStrategy(strat);
 		model.put("lucayan", strategy);
 		modelAndView.addObject("strategy", strat);
-		return new ModelAndView("redirect:/index.html");
+		return new ModelAndView("redirect:/lucayan.html");
 	}
 	
 	private Date getCurrentDate() throws ParseException{

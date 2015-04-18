@@ -2,9 +2,11 @@ package com.spring.controller;
 
 import static com.googlecode.charts4j.Color.ALICEBLUE;
 import static com.googlecode.charts4j.Color.BLACK;
+import static com.googlecode.charts4j.Color.BLUEVIOLET;
 import static com.googlecode.charts4j.Color.LAVENDER;
 import static com.googlecode.charts4j.Color.WHITE;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +18,7 @@ import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -30,6 +33,8 @@ import com.googlecode.charts4j.AxisLabels;
 import com.googlecode.charts4j.AxisLabelsFactory;
 import com.googlecode.charts4j.AxisStyle;
 import com.googlecode.charts4j.AxisTextAlignment;
+import com.googlecode.charts4j.BarChart;
+import com.googlecode.charts4j.BarChartPlot;
 import com.googlecode.charts4j.Color;
 import com.googlecode.charts4j.Data;
 import com.googlecode.charts4j.DataUtil;
@@ -50,7 +55,7 @@ import com.spring.service.StrategyService;
 import com.spring.test.UserUIObject;
 
 @Controller
-@SessionAttributes({"strategy", "order", "runners"})
+@SessionAttributes({"strategy", "order", "runners", "gmLineChart", "gMcBarChart"})
 public class GingerMcController {
 	
 	@Autowired
@@ -61,70 +66,137 @@ public class GingerMcController {
 	private RunnerService runnerService;
 	@Autowired
 	private MarketCatalogueService marketCatalogueService;
+	private String months[] = {"January", "February", "March", "April",
+            "May", "June", "July", "August", "September",
+            "October", "November", "December"};
+	
 	
 	@RequestMapping(value="gingermc", method = RequestMethod.GET)
 	public ModelAndView showGingerMc(ModelMap model){
-		Strategy gingermc = strategyService.getStrategy(2);
-		List<UserUIObject> orderData = getDataForRunnerTable();
-		LineChart lineChart = createLineChart();
-		PieChart pieChart = createPieChart();
-		Double totalReturnForUser = getUserPercentageOfTotalReturn();
-		Double totalReturnForGingerMc = getTotalReturnForStrategy();
-		String signUpDate = getDateUserInvested();
+		String lineChart = (String) RequestContextHolder.currentRequestAttributes().getAttribute("gmLineChart", RequestAttributes.SCOPE_SESSION);
+		String barChart = (String) RequestContextHolder.currentRequestAttributes().getAttribute("gMcBarChart", RequestAttributes.SCOPE_SESSION);
+		if(lineChart==null)model.put("gmLineChart", createLineChart(3).toURLString());
+		if(barChart==null)model.put("gMcBarChart", createBarChart(3));
 		
-		model.put("list", orderData);
+		Strategy gingermc = strategyService.getStrategy(2);
+		PieChart pieChart = createPieChart();
+		
+		model.put("list", getDataForRunnerTable());
 		model.put("strategy", gingermc);
 		model.addAttribute("pieChart", pieChart.toURLString());
-		model.addAttribute("signUpDate", signUpDate);
+		model.addAttribute("signUpDate", getDateUserInvested());
 		model.addAttribute("gingerMcSubscribers", gingermc.getAccounts().size());
-		model.addAttribute("totalReturn", totalReturnForGingerMc);
-		model.addAttribute("totalUserReturn", totalReturnForUser);
-		model.addAttribute("lineChart", lineChart.toURLString());
+		model.addAttribute("totalReturn", getTotalReturnForStrategy());
+		model.addAttribute("totalUserReturn", getUserPercentageOfTotalReturn());
 		return new ModelAndView("gingermc");
 	}
 	
-	//TODO change data to match GingerMc strategy
-	private LineChart createLineChart() {
+	@RequestMapping(value="/gMcBarChartMonth/{id}")
+	public ModelAndView updateBarChart(@PathVariable("id") Integer id, ModelMap model){
+		BarChart barChart = createBarChart(id);
+		model.put("gMcBarChart", barChart.toURLString());
+		return new ModelAndView("redirect:/gingermc.html");
+	}
+	
+	private BarChart createBarChart(Integer month){
+		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		List<Result> gingerMcResults = getGingerMcResults(resultsService.getResults());
+		Map<Date, Double> dailyReturns = getDailyReturns(gingerMcResults);
+		Map<Date, Double> orderedReturns = new TreeMap<Date, Double>(dailyReturns);
+		List<String> dates = new ArrayList<String>();
+		List<Double> returns = new ArrayList<Double>();
+		
+		for (Map.Entry<Date, Double> entry : orderedReturns.entrySet())
+		{
+			if(entry.getKey().after(user.getAccount().getGingerRegisterDate()) && entry.getKey().getMonth() == month){
+				Double profitPercentage = (user.getAccount().getGingermc()/10)*entry.getValue();
+				System.out.println(profitPercentage);
+				Integer temp = entry.getKey().getDate();
+				String date = Integer.toString(temp);
+				dates.add(date);
+				if(profitPercentage > 100){
+					returns.add(100.);
+				}else if(profitPercentage < 0){
+					returns.add(0.0);
+				}else{
+					returns.add(profitPercentage);
+				}
+			}
+		}
+
+		BarChartPlot team1 = Plots.newBarChartPlot(Data.newData(returns), BLUEVIOLET);
+		// Instantiating chart.
+		BarChart chart = GCharts.newBarChart(team1);
+		// Defining axis info and styles
+		AxisStyle axisStyle = AxisStyle.newAxisStyle(BLACK, 13, AxisTextAlignment.CENTER);
+		AxisLabels score = AxisLabelsFactory.newAxisLabels("€", 50.0);
+		score.setAxisStyle(axisStyle);
+		AxisLabels year = AxisLabelsFactory.newAxisLabels("Day of the Month", 50.0);
+		year.setAxisStyle(axisStyle);
+
+		// Adding axis info to chart.
+		chart.addXAxisLabels(AxisLabelsFactory.newAxisLabels(dates));
+		chart.addYAxisLabels(AxisLabelsFactory.newNumericRangeAxisLabels(0, 100));
+		chart.addYAxisLabels(score);
+		chart.addXAxisLabels(year);
+
+		chart.setSize(600, 450);
+		chart.setBarWidth(25);
+		chart.setSpaceWithinGroupsOfBars(20);
+		chart.setDataStacked(true);
+		chart.setGrid(100, 10, 3, 2);
+		chart.setBackgroundFill(Fills.newSolidFill(ALICEBLUE));
+		LinearGradientFill fill = Fills.newLinearGradientFill(0, LAVENDER, 100);
+		fill.addColorAndOffset(WHITE, 0);
+		chart.setAreaFill(fill);
+
+		return chart;
+	}
+	
+	@RequestMapping(value="/updateGingerMcLineChart/{id}")
+	public ModelAndView updateLineChartByMonth(@PathVariable("id") Integer id, ModelMap model) throws ParseException{
+		LineChart lineChart = createLineChart(id);
+		model.addAttribute("gmLineChart", lineChart.toURLString());
+		return new ModelAndView("redirect:/gingermc.html");
+	}
+	
+	private LineChart createLineChart(Integer month) {
 		List<Result> temps =  resultsService.getResults();
 		List<Result> results = getGingerMcResults(temps);
 		Map<Date, Double> dailyReturns = getDailyReturns(results);
 		Map<Date, Double> orderedReturns = new TreeMap<Date, Double>(dailyReturns);
 		List<String> dates = new ArrayList<String>();    
 		List<Double> returns = new ArrayList<Double>();
+		Double monthlyReturn = 0.0;
 		
 		for (Map.Entry<Date, Double> entry : orderedReturns.entrySet())
 		{
-			//TODO set to show February's data only, change when user selects different month
-			if(entry.getKey().getMonth() == 2){
+			if(entry.getKey().getMonth() == month){
 				Integer temp = entry.getKey().getDate();
 				String date = Integer.toString(temp);
 				dates.add(date);
-				if(entry.getValue() > 100){
-					Double val = entry.getValue()-100;
-					returns.add(val);
-				}else{
-					returns.add(entry.getValue());
-				}
+				returns.add(entry.getValue());
+				monthlyReturn+=entry.getValue();
 			}
 		}
 		
-		Data data = DataUtil.scale(returns);
-		final Line line = Plots.newLine(Data.newData(returns));
+		final Line line = Plots.newLine(DataUtil.scaleWithinRange(-50,20,returns), BLUEVIOLET);
 		line.setColor(BLACK);
 		final LineChart chart = GCharts.newLineChart(line);
 		chart.setSize(650, 450);
-		chart.setGrid(200, 5, 5, 0);
+		chart.setGrid(100, 10, 3, 2);
+		chart.setBackgroundFill(Fills.newSolidFill(ALICEBLUE));
 		AxisStyle axisStyle = AxisStyle.newAxisStyle(BLACK, 13, AxisTextAlignment.CENTER);
 		AxisLabels amount = AxisLabelsFactory.newAxisLabels("€", 50.0);
         amount.setAxisStyle(axisStyle);
         AxisLabels Day = AxisLabelsFactory.newAxisLabels("Day of the Month", 50.0);
         Day.setAxisStyle(axisStyle);
         
-		chart.setTitle("Returns|(per €100 invested)", BLACK, 14);
+        chart.setTitle("€"+monthlyReturn+"|(per €100 invested in "+months[month]+")", BLACK, 14);
 		chart.addXAxisLabels(AxisLabelsFactory.newAxisLabels(dates));
-		chart.addYAxisLabels(AxisLabelsFactory.newAxisLabels("0", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100"));
+		chart.addYAxisLabels(AxisLabelsFactory.newNumericRangeAxisLabels(-50, 20));
 		chart.setBackgroundFill(Fills.newSolidFill(ALICEBLUE));
-		LinearGradientFill fill = Fills.newLinearGradientFill(0, LAVENDER, 100);
+		LinearGradientFill fill = Fills.newLinearGradientFill(0, LAVENDER, 10);
         fill.addColorAndOffset(WHITE, 0);
         chart.setAreaFill(fill);    
 		chart.addYAxisLabels(amount);
@@ -168,8 +240,7 @@ public class GingerMcController {
 	private List<Result> getGingerMcResults(List<Result> results) {
 		List<Result> temps = new ArrayList<Result>();
 		for(Result res: results){
-			//TODO change to 2 for GingerMc
-			if(res.getStrategyId() == 1){
+			if(res.getStrategyId() == 2){
 				temps.add(res);
 			}
 			
@@ -200,7 +271,6 @@ public class GingerMcController {
 					index = 0;
 				}
 				Runner runner = runnerService.getRunner(mc.getRunners().get(index).getSelectionId());
-				System.out.println(runner);
 				UserUIObject tempRunner = new UserUIObject();
 				tempRunner.setMarketId(mc.getMarketId());
 				tempRunner.setDate(mc.getMarketTime());
@@ -209,6 +279,7 @@ public class GingerMcController {
 				tempRunner.setExpWinnings(runner.getOrders().get(0).getExp_winnigs());
 				tempRunner.setHorseName(mc.getRunners().get(index).getRunnerName());
 				tempRunner.setLiability(runner.getOrders().get(0).getBspLiability());
+				tempRunner.setSide(runner.getOrders().get(0).getSide());
 				list.add(tempRunner);
 				model.addAttribute("marketCat", mc.getMarketId());
 				index++;
@@ -219,8 +290,7 @@ public class GingerMcController {
 	
 	private Double getUserPercentageOfTotalReturn(){
 		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
-		if(user == null || user.getAccount().getRaglanReturns() == null)return 0.0;
-		
+		if(user == null || user.getAccount().getGingerReturns() == null)return 0.0;
 		return user.getAccount().getGingerReturns();
 	}
 	

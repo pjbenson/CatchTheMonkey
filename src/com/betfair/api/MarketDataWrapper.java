@@ -58,6 +58,7 @@ public class MarketDataWrapper implements IMarketDataSource{
 		params.put(MARKET_IDS, marketIds);
 		params.put(PRICE_PROJECTION, priceProjection);
 		String result = getInstance().request(Operation.LISTMARKETBOOK.getOperationName(), params);
+		if(result==null)return null;
 		ListMarketBooks listMarketBooks = JsonConverter.convertFromJson(result, ListMarketBooks.class);
 		
 		return listMarketBooks.getResult();

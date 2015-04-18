@@ -19,7 +19,7 @@ public class UserDaoImpl implements UserDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-	private Session openSession() {
+	public Session openSession() {
         return sessionFactory.getCurrentSession();
     }
 

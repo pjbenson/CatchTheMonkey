@@ -57,15 +57,12 @@ public class UserController {
 		for(Strategy strategy: u.getAccount().getStrategies()){
 			if(strategy.getName().equals("RAGLAN_ROAD")){
 				model.addAttribute("raglanroad", user.getAccount().getRaglanroad());
-				System.out.println("YESY");
 			}
 			if(strategy.getName().equals("GINGER_MAC")){
 				model.addAttribute("gingermc", user.getAccount().getGingermc());
-				System.out.println("YESY");
 			}
 			if(strategy.getName().equals("LUCAYAN")){
 				model.addAttribute("lucayan", user.getAccount().getLucayan());
-				System.out.println("YESY");
 			}
 		}	
 		
@@ -117,6 +114,10 @@ public class UserController {
 		return new ModelAndView("index", model);
 	}
 	
+	@RequestMapping(value = "/contact", method = RequestMethod.GET)
+	public ModelAndView showContactPage(){
+		return new ModelAndView("contact");
+	}
 	private User prepareModel(UserBean userBean){
 		Account acc = new Account();
 		acc.setBalance(0.0);

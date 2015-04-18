@@ -188,7 +188,7 @@ public class RaglanRoad implements IStrategy{
 	@Override
 	public List<MarketCatalogue> getListMarketCatalogue() throws APINGException, ParseException{
 		Date dt = new Date();
-		dt.setHours(17);
+		dt.setHours(21);
 		eventTypeIds.add("7");
 		countries.add("GB");
 		countries.add("IE");

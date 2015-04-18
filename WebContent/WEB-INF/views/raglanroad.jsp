@@ -71,13 +71,54 @@
 <script type="text/javascript">
 	function doAjax(x) {
 		$.ajax({
-			type: "POST",
+			type : "POST",
 			url : 'month.html',
-			data : ({ val : x }),
+			data : ({
+				val : x
+			}),
 			success : function(data) {
 				$('#month').html(data);
 			}
 		});
+	}
+</script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+	// Load the Visualization API and the piechart package.
+	google.load('visualization', '1.0', {
+		'packages' : [ 'corechart' ]
+	});
+
+	// Set a callback to run when the Google Visualization API is loaded.
+	google.setOnLoadCallback(drawChart);
+
+	// Callback that creates and populates a data table,
+	// instantiates the pie chart, passes in the data and
+	// draws it.
+	function drawChart() {
+
+		// Create the data table.    
+		var data = google.visualization.arrayToDataTable([
+				[ 'Country', 'Area(square km)' ],
+				<c:forEach items="${pie}" var="entry">['${entry.key}',
+						${entry.value}], </c:forEach> ]);
+		// Set chart options
+		var options = {
+			'title' : 'Area-wise Top Seven Countries in the World',
+			is3D : true,
+			pieSliceText : 'label',
+			tooltip : {
+				showColorCode : true
+			},
+			'width' : 600,
+			'height' : 500,
+			backgroundColor : '#f1f8e9'
+		};
+
+		// Instantiate and draw our chart, passing in some options.
+		var chart = new google.visualization.PieChart(document
+				.getElementById('chart_div'));
+		chart.draw(data, options);
 	}
 </script>
 </head>
@@ -106,7 +147,8 @@
 						<ul class="nav navbar-nav navbar-right">
 							<li class="dropdown"><a class="dropdown-toggle"
 								role="button" data-toggle="dropdown"><i
-									class="glyphicon glyphicon-user"></i>${sessionScope.user.firstName} <span class="caret"></span></a>
+									class="glyphicon glyphicon-user"></i>${sessionScope.user.firstName}
+									<span class="caret"></span></a>
 								<ul class="dropdown-menu" role="menu">
 									<li><a href="profile.html">My Profile</a></li>
 									<li><a href="updateBalance.html">Add To Wallet</a></li>
@@ -124,16 +166,14 @@
 		</nav>
 	</div>
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col-lg-12">
-				<h1 class="page-header">${sessionScope.strategy.name}</h1>
-			</div>
-			<!-- /.col-lg-12 -->
-		</div>
 		<!-- /.row -->
 		<!-- /.row -->
 		<div class="row">
 			<div class="col-lg-6">
+				<h3>
+					<i class="glyphicon glyphicon-briefcase"></i> Toolbox
+				</h3>
+				<hr>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<i class="fa fa-line-chart fa-fw"></i> Raglan Road ROI
@@ -145,25 +185,25 @@
 									Month <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu pull-right" role="menu">
-									<li><a onclick="doAjax(0)">January</a></li>
-									<li><a onclick="doAjax(1)">February</a></li>
-									<li><a onclick="doAjax(2)">March</a></li>
-									<li><a onclick="doAjax(3)">April</a></li>
-									<li><a onclick="doAjax(4)">May</a></li>
-									<li><a onclick="doAjax(5)">June</a></li>
-									<li><a onclick="doAjax(6)">July</a></li>
-									<li><a onclick="doAjax(7)">August</a></li>
-									<li><a onclick="doAjax(8)">September</a></li>
-									<li><a onclick="doAjax(9)">October</a></li>
-									<li><a onclick="doAjax(10)">November</a></li>
-									<li><a onclick="doAjax(11)">December</a></li>
+									<li><a href="<c:url value="/lineChartMonth/0.html" />">January</a></li>
+									<li><a href="<c:url value="/lineChartMonth/1.html" />">February</a></li>
+									<li><a href="<c:url value="/lineChartMonth/2.html" />">March</a></li>
+									<li><a href="<c:url value="/lineChartMonth/3.html" />">April</a></li>
+									<li><a href="<c:url value="/lineChartMonth/4.html" />">May</a></li>
+									<li><a href="<c:url value="/lineChartMonth/5.html" />">June</a></li>
+									<li><a href="<c:url value="/lineChartMonth/6.html" />">July</a></li>
+									<li><a href="<c:url value="/lineChartMonth/7.html" />">August</a></li>
+									<li><a href="<c:url value="/lineChartMonth/8.html" />">September</a></li>
+									<li><a href="<c:url value="/lineChartMonth/9.html" />">October</a></li>
+									<li><a href="<c:url value="/lineChartMonth/10.html" />">November</a></li>
+									<li><a href="<c:url value="/lineChartMonth/11.html" />">December</a></li>
 								</ul>
 							</div>
 						</div>
 					</div>
 					<!-- /.panel-heading -->
 					<div class="panel-body">
-						<img align="bottom" alt="Google Pie Chart" src="${lineChart}"
+						<img align="bottom" alt="Google Pie Chart" src="${rrLineChart}"
 							width="610px" />
 					</div>
 					<!-- /.panel-body -->
@@ -200,6 +240,7 @@
 											<th>Horse Name</th>
 											<th>Date & Time</th>
 											<th>Price</th>
+											<th>Side</th>
 											<th>Liability</th>
 											<th>Return per €100</th>
 										</tr>
@@ -215,6 +256,7 @@
 													<td><c:out value="${list.horseName}" /></td>
 													<td><c:out value="${list.date}" /></td>
 													<td><c:out value="${list.price}" /></td>
+													<td><c:out value="${list.side}" /></td>
 													<td><c:out value="${list.liability}" /></td>
 													<td><c:out value="${list.expWinnings}" /></td>
 												</tr>
@@ -278,10 +320,78 @@
 					</div>
 					<!-- /.panel-body -->
 				</div>
+				
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<i class="fa fa-bar-chart-o fa-fw"></i> Test
+					</div>
+					<script>
+					google.load('visualization', '1.1', {packages: ['line', 'corechart']});
+    google.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var classicChart;
+      var classicDiv = document.getElementById('classic');
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('date', 'Month');
+      data.addColumn('number', "RaglanRoad");
+
+      data.addRows([
+        [new Date(2015, 0),  -.5],
+        [new Date(2015, 1),   .4],
+        [new Date(2015, 2),   .5],
+        [new Date(2015, 3),  2.9],
+        [new Date(2015, 4),  6.3],
+        [new Date(2015, 5),    9],
+        [new Date(2015, 6), 10.6],
+        [new Date(2015, 7), 10.3],
+        [new Date(2015, 8),  7.4],
+        [new Date(2015, 9),  4.4],
+        [new Date(2015, 10), 1.1],
+        [new Date(2015, 11), -.2]
+      ]);
+
+      var classicOptions = {
+        width: 600,
+        height: 500,
+        backgroundColor: '#f1f8e9',
+        // Gives each series an axis that matches the vAxes number below.
+        series: {
+          0: {targetAxisIndex: 0},
+          1: {targetAxisIndex: 1}
+        },
+        vAxes: {
+          // Adds titles to each axis.
+          0: {title: 'ROI'},
+          1: {title: 'Month'}
+        },
+        vAxis: {
+          viewWindow: {
+            max: 40
+          }
+        }
+      };
+	  classicChart = new google.visualization.LineChart(classicDiv);
+
+      classicChart.draw(data, classicOptions);
+    }
+    </script>
+					<!-- /.panel-heading -->
+					<div class="panel-body">
+					<div id="classic" ></div>
+					</div>
+					<!-- /.panel-body -->
+				</div>
 				<!-- /.panel -->
 			</div>
 			<!-- /.col-lg-8 -->
 			<div class="col-lg-6">
+				<h3>
+					<i class="glyphicon glyphicon-briefcase"></i> Toolbox
+				</h3>
+				<hr>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<i class="fa fa-bar-chart fa-fw"></i> Raglan Road Information
@@ -295,8 +405,7 @@
 									€${sessionScope.user.account.raglanroad}</span>
 							</a> <a href="#" class="list-group-item"> <i
 								class="fa fa-user fa-fw"></i>Date you invested: <span
-								class="pull-right text-muted small">
-									${signUpDate}</span>
+								class="pull-right text-muted small"> ${signUpDate}</span>
 							</a><a href="#" class="list-group-item"> <i
 								class="fa fa-user fa-fw"></i> Your total return to date: <span
 								class="pull-right text-muted small">€${totalUserReturn}</span>
@@ -320,7 +429,7 @@
 				<!-- /.panel -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<i class="fa fa-bar-chart-o fa-fw"></i>Your Monthly returns
+						<i class="fa fa-bar-chart-o fa-fw"></i>Your Monthly Returns
 						<div class="pull-right">
 							<div class="btn-group">
 								<button type="button"
@@ -329,25 +438,25 @@
 									Month <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu pull-right" role="menu">
-									<li><a onclick="myFunction(1)">January</a></li>
-									<li><a href="#">February</a></li>
-									<li><a href="#">March</a></li>
-									<li><a href="#">April</a></li>
-									<li><a href="#">May</a></li>
-									<li><a href="#">June</a></li>
-									<li><a href="#">July</a></li>
-									<li><a href="#">August</a></li>
-									<li><a href="#">September</a></li>
-									<li><a href="#">October</a></li>
-									<li><a href="#">November</a></li>
-									<li><a href="#">December</a></li>
+									<li><a href="<c:url value="/barChartMonth/0.html" />">January</a></li>
+									<li><a href="<c:url value="/barChartMonth/1.html" />">February</a></li>
+									<li><a href="<c:url value="/barChartMonth/2.html" />">March</a></li>
+									<li><a href="<c:url value="/barChartMonth/3.html" />">April</a></li>
+									<li><a href="<c:url value="/barChartMonth/4.html" />">May</a></li>
+									<li><a href="<c:url value="/barChartMonth/5.html" />">June</a></li>
+									<li><a href="<c:url value="/barChartMonth/6.html" />">July</a></li>
+									<li><a href="<c:url value="/barChartMonth/7.html" />">August</a></li>
+									<li><a href="<c:url value="/barChartMonth/8.html" />">September</a></li>
+									<li><a href="<c:url value="/barChartMonth/9.html" />">October</a></li>
+									<li><a href="<c:url value="/barChartMonth/10.html" />">November</a></li>
+									<li><a href="<c:url value="/barChartMonth/11.html" />">December</a></li>
 								</ul>
 							</div>
 						</div>
 					</div>
 					<div class="panel-body">
 						<div id="morris-donut-chart"></div>
-						<img alt="Google Pie Chart" src="${barChart}" width="610px" />
+						<img alt="Google Pie Chart" src="${rrBarChart}" width="610px" />
 					</div>
 					<!-- /.panel-body -->
 				</div>
@@ -358,95 +467,9 @@
 						Comparison
 					</div>
 					<div class="panel-body">
-						<div id="morris-donut-chart"></div>
+						<div id="chart_div"></div>
 					</div>
 					<!-- /.panel-body -->
-				</div>
-				<!-- /.panel -->
-				<div class="chat-panel panel panel-default">
-					<div class="panel-heading">
-						<i class="fa fa-comments fa-fw"></i> Chat
-						<div class="btn-group pull-right">
-							<button type="button"
-								class="btn btn-default btn-xs dropdown-toggle"
-								data-toggle="dropdown">
-								<i class="fa fa-chevron-down"></i>
-							</button>
-							<ul class="dropdown-menu slidedown">
-								<li><a href="#"> <i class="fa fa-refresh fa-fw"></i>
-										Refresh
-								</a></li>
-								<li><a href="#"> <i class="fa fa-check-circle fa-fw"></i>
-										Available
-								</a></li>
-								<li><a href="#"> <i class="fa fa-times fa-fw"></i> Busy
-								</a></li>
-								<li><a href="#"> <i class="fa fa-clock-o fa-fw"></i>
-										Away
-								</a></li>
-								<li class="divider"></li>
-								<li><a href="#"> <i class="fa fa-sign-out fa-fw"></i>
-										Sign Out
-								</a></li>
-							</ul>
-						</div>
-					</div>
-					<!-- /.panel-heading -->
-					<div class="panel-body">
-						<ul class="chat">
-							<li class="left clearfix"><span class="chat-img pull-left">
-							</span>
-								<div class="chat-body clearfix">
-									<div class="header">
-										<strong class="primary-font">Jack Sparrow</strong> <small
-											class="pull-right text-muted"> <i
-											class="fa fa-clock-o fa-fw"></i> 12 mins ago
-										</small>
-									</div>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-										Curabitur bibendum ornare dolor, quis ullamcorper ligula
-										sodales.</p>
-								</div></li>
-							<li class="left clearfix">
-								<div class="chat-body clearfix">
-									<div class="header">
-										<strong class="primary-font">Jack Sparrow</strong> <small
-											class="pull-right text-muted"> <i
-											class="fa fa-clock-o fa-fw"></i> 14 mins ago
-										</small>
-									</div>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-										Curabitur bibendum ornare dolor, quis ullamcorper ligula
-										sodales.</p>
-								</div>
-							</li>
-							<li class="left clearfix">
-								<div class="chat-body clearfix">
-									<div class="header">
-										<strong class="primary-font">Jack Sparrow</strong> <small
-											class="pull-right text-muted"> <i
-											class="fa fa-clock-o fa-fw"></i> 14 mins ago
-										</small>
-									</div>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-										Curabitur bibendum ornare dolor, quis ullamcorper ligula
-										sodales.</p>
-								</div>
-							</li>
-						</ul>
-					</div>
-					<!-- /.panel-body -->
-					<div class="panel-footer">
-						<div class="input-group">
-							<input id="btn-input" type="text" class="form-control input-sm"
-								placeholder="Type your message here..." /> <span
-								class="input-group-btn">
-								<button class="btn btn-warning btn-sm" id="btn-chat">
-									Send</button>
-							</span>
-						</div>
-					</div>
-					<!-- /.panel-footer -->
 				</div>
 				<!-- /.panel .chat-panel -->
 			</div>

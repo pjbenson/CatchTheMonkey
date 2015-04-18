@@ -39,7 +39,7 @@
 								class="icon-bar"></span> <span class="icon-bar"></span> <span
 								class="icon-bar"></span>
 						</button>
-						<a class="navbar-brand" href="#">Catch The Monkey</a>
+						<a class="navbar-brand" href="index.html">Catch The Monkey</a>
 					</div>
 					<div id="navbar" class="navbar-collapse collapse">
 						<ul class="nav navbar-nav">
@@ -47,22 +47,7 @@
 							<c:if test="${empty sessionScope.user.firstName}">
 								<li><a href="loginform.html">Login</a></li>
 							</c:if>
-							<li><a href="#contact">Contact</a></li>
-							<c:if test="${empty sessionScope.user.firstName}">
-								<li class="dropdown"><a href="#" class="dropdown-toggle"
-									data-toggle="dropdown" role="button" aria-expanded="false">Dropdown
-										<span class="caret"></span>
-								</a>
-									<ul class="dropdown-menu" role="menu">
-										<li><a href="raglanroad.html">Action</a></li>
-										<li><a href="#">Another action</a></li>
-										<li><a href="#">Something else here</a></li>
-										<li class="divider"></li>
-										<li class="dropdown-header">Nav header</li>
-										<li><a href="#">Separated link</a></li>
-										<li><a href="#">One more separated link</a></li>
-									</ul></li>
-							</c:if>
+							<li><a href="contact.html">Contact</a></li>
 						</ul>
 						<c:if test="${not empty sessionScope.user.firstName}">
 							<ul class="nav navbar-nav navbar-right">
@@ -105,7 +90,7 @@
 					<div class="carousel-caption">
 						<h1>Welcome to Catch The Monkey</h1>
 						<p>You can avail of a range of strategies that vary in risk,
-							return on investment and complexity. All strategies are designed
+							return on investment (ROI) and complexity. All strategies are designed
 							to generate profit through different means via the Betfair
 							exchange.</p>
 						<p>
@@ -118,13 +103,14 @@
 				<img src="bootstrap/img/slide2.gif" alt="Second slide">
 				<div class="container">
 					<div class="carousel-caption">
-						<h1>View Daily Statistics</h1>
-						<p>Select from a range of charts to help visualise your
-							strategy.</p>
+					<h1>Investment</h1>
+						<p>Choose a strategy that best suits your risk profile and avail of monthly 
+						returns. The amount you invest is entirely up to you and you may retract
+						your investment at any point. </p>
 						<p>
 							<a class="btn btn-lg btn-primary" href="register.html"
 								role="button">Sign up today</a>
-						</p>
+						</p>						
 					</div>
 				</div>
 			</div>
@@ -132,10 +118,10 @@
 				<img src="bootstrap/img/slide3.gif" alt="Third slide">
 				<div class="container">
 					<div class="carousel-caption">
-						<h1>Browse Gallery</h1>
-						<p>Cras justo odio, dapibus ac facilisis in, egestas eget
-							quam. Donec id elit non mi porta gravida at eget metus. Nullam id
-							dolor id nibh ultricies vehicula ut id elit.</p>
+						<h1>View Daily Statistics</h1>
+						<p>Strategy and user performance is represented via modern graphing tools and
+						charts. All charts can be filtered to monitor performance by month. Improve
+						your knowledge of strategies by analysing daily charts./p>
 						<p>
 							<a class="btn btn-lg btn-primary" href="register.html"
 								role="button">Sign up today</a>
@@ -156,9 +142,6 @@
 	<!-- /.carousel -->
 
 	<hr class="featurette-divider">
-	<!-- Marketing messaging and featurettes
-    ================================================== -->
-	<!-- Wrap the rest of the page in another container to center all the content. -->
 
 	<div class="container marketing">
 
@@ -170,24 +153,9 @@
 					alt="Generic placeholder image"
 					style="width: 140px; height: 140px;">
 				<h2>Raglan Road</h2>
-				<p>Raglan Road is high risk strategy that seeks 
-				to generate profit by executing trades automatically
-				via Betfair.</p>
-				<p>
-					<a class="btn btn-default" href="strategyChoice.html" role="button">View details
-						&raquo;</a>
+				<p>Raglan Road is a high risk strategy that seeks 
+				to generate profit using hedging techniques. Users must be aware of the risks.
 				</p>
-			</div>
-			<!-- /.col-lg-4 -->
-			<div class="col-lg-4">
-				<img class="img-circle"
-					src="bootstrap/img/ginger.jpg"
-					alt="Generic placeholder image"
-					style="width: 140px; height: 140px;">
-				<h2>Ginger Mc</h2>
-				<p>Ginger Mc is a medium risk strategy and is seeks to 
-				generate profit through more conservative trades than
-				Raglan Road.</p>
 				<p>
 					<a class="btn btn-default" href="strategyChoice.html" role="button">View details
 						&raquo;</a>
@@ -200,8 +168,22 @@
 					alt="Generic placeholder image"
 					style="width: 140px; height: 140px;">
 				<h2>Lucayan</h2>
-				<p>Lucayan is our lowest risk strategy. All trades are catious in 
-				nature and there are many hedging techniques applied to offset risk.</p>
+				<p>Lucayan is a medium risk strategy and is an extension of Raglan Road.
+				Users are exposed to less risk and trading activity is less frequent.</p>
+				<p>
+					<a class="btn btn-default" href="strategyChoice.html" role="button">View details
+						&raquo;</a>
+				</p>
+			</div>
+			<!-- /.col-lg-4 -->
+			<div class="col-lg-4">
+				<img class="img-circle"
+					src=bootstrap/img/ginger.jpg
+					alt="Generic placeholder image"
+					style="width: 140px; height: 140px;">
+				<h2>GingerMc</h2>
+				<p>GingerMc is a low risk strategy. All trades are catious in 
+				nature and users face minimal exposure to risk but risk is not erradicated.</p>
 				<p>
 					<a class="btn btn-default" href="strategyChoice.html" role="button">View details
 						&raquo;</a>
@@ -218,9 +200,9 @@
 				<h2 class="featurette-heading">
 					A structured investment approach. <span class="text-muted">The next generation in investment.</span>
 				</h2>
-				<p class="lead">Catch The Monkey allows you to take the stress out of trading
+				<p class="lead">Catch The Monkey allows you to take the stress out of manual trading
 				on Betfair. With high analytical research and quantitative methods each strategy
-				provides customers with all the advantages of porfolio investment from a stockbroker.</p>
+				provides customers with all the advantages of porfolio investment from a stockbroker with the added advantage of greater visibilty.</p>
 			</div>
 			
 			<div class="col-md-5">
@@ -237,7 +219,7 @@
 			</div>
 			<div class="col-md-7">
 				<h2 class="featurette-heading">
-					Hassle free, daily returns. <span class="text-muted">Customer orientation.</span>
+					Hassle free, monthly returns. <span class="text-muted">Customer orientation.</span>
 				</h2>
 				<p class="lead">All strategies on Catch The Monkey are executed automatically via the 
 				Betfair exchange which means that customers simply sign up to a strategy or strategies of their choice and 

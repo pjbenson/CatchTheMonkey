@@ -63,7 +63,7 @@ public class Lucayan implements IStrategy {
 		double ratio1, ratio2,ratio3;
 		double exp1, exp2, exp3;
 		
-		if(marketBooks.isEmpty()){
+		if(marketBooks.isEmpty() || marketBooks==null){
 			System.out.print("No markets today for Lucayan: "+ new Date());
 			return;
 		}
@@ -119,22 +119,22 @@ public class Lucayan implements IStrategy {
 			instruction3.setLimitOrder(limitOrder3);
 			instructions.add(instruction3);
 			
-//			Order o1 = generateOrderObject(instructions.get(0), price1, ratio1, exp1);
-//			persister.persistOrder(o1);
-//			Order o2 = generateOrderObject(instructions.get(1), price2, ratio2, exp2);
-//			persister.persistOrder(o2);
-//			Order o3 = generateOrderObject(instructions.get(2), price3, ratio3, exp3);
-//			persister.persistOrder(o3);
-//			List<Runner> runners = getRunners(mb);
-//			Runner r1 = runners.get(0);
-//			r1.addOrder(o1);
-//			persister.persistRunner(r1);
-//			Runner r2 = runners.get(1);
-//			r2.addOrder(o2);
-//			persister.persistRunner(r2);
-//			Runner r3 = runners.get(2);
-//			r3.addOrder(o3);
-//			persister.persistRunner(r3);
+			Order o1 = generateOrderObject(instructions.get(0), price1, ratio1, exp1);
+			persister.persistOrder(o1);
+			Order o2 = generateOrderObject(instructions.get(1), price2, ratio2, exp2);
+			persister.persistOrder(o2);
+			Order o3 = generateOrderObject(instructions.get(2), price3, ratio3, exp3);
+			persister.persistOrder(o3);
+			List<Runner> runners = getRunners(mb);
+			Runner r1 = runners.get(0);
+			r1.addOrder(o1);
+			persister.persistRunner(r1);
+			Runner r2 = runners.get(1);
+			r2.addOrder(o2);
+			persister.persistRunner(r2);
+			Runner r3 = runners.get(2);
+			r3.addOrder(o3);
+			persister.persistRunner(r3);
 
 			PlaceExecutionReport placeBetResult = dataSource.placeOrders(mb.getMarketId(), instructions);
 			
@@ -165,7 +165,7 @@ public class Lucayan implements IStrategy {
 	@Override
 	public List<MarketCatalogue> getListMarketCatalogue() throws APINGException, ParseException{
 		Date dt = new Date();
-		dt.setHours(17);
+		dt.setHours(21);
 		eventTypeIds.add("7");
 		countries.add("GB");
 		countries.add("IE");
@@ -185,10 +185,17 @@ public class Lucayan implements IStrategy {
 		for(MarketCatalogue marketCatalogue: listMarketCatalogue){
 			if(marketCatalogue.getMarketName().contains("Nov") && marketCatalogue.getMarketName().contains("Chs") && !marketCatalogue.getMarketName().contains("Hcap")){
 				result.add(marketCatalogue);
+				persister.persistRunnerCatalogue(marketCatalogue.getRunners().get(0));
+				persister.persistRunnerCatalogue(marketCatalogue.getRunners().get(1));
+				persister.persistRunnerCatalogue(marketCatalogue.getRunners().get(2));
+				persister.persistMarketCatalogue(marketCatalogue, 3, 0);
 			}
-			//TODO check what simple Betfair have for beginners chases
 			if(marketCatalogue.getMarketName().contains("Beg") && marketCatalogue.getMarketName().contains("Chs")){
 				result.add(marketCatalogue);
+				persister.persistRunnerCatalogue(marketCatalogue.getRunners().get(0));
+				persister.persistRunnerCatalogue(marketCatalogue.getRunners().get(1));
+				persister.persistRunnerCatalogue(marketCatalogue.getRunners().get(2));
+				persister.persistMarketCatalogue(marketCatalogue, 3, 0);
 			}
 		}
 		return result;
