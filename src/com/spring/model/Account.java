@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -61,6 +62,9 @@ public class Account implements Serializable {
 	@OneToOne
     @PrimaryKeyJoinColumn
 	private User user;
+	
+	@OneToOne(mappedBy="account", cascade=CascadeType.ALL)
+    private CreditCard creditCard;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "accounts_strategies", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "strategy_id"))
@@ -161,5 +165,11 @@ public class Account implements Serializable {
 	public void addToLucayanReturns(Double amount) {
 		if(this.lucayanReturns == null)this.lucayanReturns = 0.0;
 		this.lucayanReturns = this.lucayanReturns + amount;
+	}
+	public CreditCard getCreditCard() {
+		return creditCard;
+	}
+	public void setCreditCard(CreditCard creditCard) {
+		this.creditCard = creditCard;
 	}
 }

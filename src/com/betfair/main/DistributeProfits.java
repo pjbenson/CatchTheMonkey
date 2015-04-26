@@ -2,7 +2,9 @@ package com.betfair.main;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -17,17 +19,16 @@ import com.spring.model.Account;
 import com.spring.model.Strategy;
 
 public class DistributeProfits {
-	
+
 	private EntityManagerFactory emf;
 	private EntityManager em;
-	
+
 	public DistributeProfits() throws IOException, ParseException{
 		new ReadExcelFile();
-//		emf = Persistence.createEntityManagerFactory("CatchTheMonkey");
-//		em = emf.createEntityManager();
-//		disperseProfitsToUsers();
+		emf = Persistence.createEntityManagerFactory("CatchTheMonkey");
+		em = emf.createEntityManager();
 	}
-	
+
 	private void disperseProfitsToUsers(){
 		Date today = new Date();
 		em.getTransaction().begin();
@@ -55,7 +56,7 @@ public class DistributeProfits {
 			em.getTransaction().commit();
 		}
 	}
-	
+
 	private Double getStrategyResults(int strategyId){
 		Date today = new Date();
 		Double daysReturn = 0.0;
@@ -67,6 +68,35 @@ public class DistributeProfits {
 			}
 		}
 		return daysReturn;
+	}
+
+	private class RunDistributeProfitTask extends TimerTask {
+
+		@Override
+		public void run() {
+			disperseProfitsToUsers();		
+		}
+
+	}
+	
+	private class TimerHelper {
+	    public Hashtable timersTable = new Hashtable();
+
+	    public void restartMyTimer(){
+	        Calendar runDate = Calendar.getInstance();
+	        runDate.set(Calendar.DAY_OF_MONTH, 1);
+	        runDate.set(Calendar.HOUR_OF_DAY, 4);
+	        runDate.set(Calendar.MINUTE, 0);
+	        runDate.add(Calendar.MONTH, 1);//set to next month
+
+	        RunDistributeProfitTask myTask = new RunDistributeProfitTask();
+	        Timer myTimer = new Timer();
+
+	        myTimer.schedule(myTask, runDate.getTime());
+
+	        timersTable = new Hashtable();//keeping a reference to the timer so we 
+	        timersTable.put("1", myTimer);//have the option to cancel it later
+	    }
 	}
 
 }

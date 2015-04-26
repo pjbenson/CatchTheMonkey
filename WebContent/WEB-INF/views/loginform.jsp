@@ -57,6 +57,20 @@ body {
         color: red; font-weight: bold;
     }
 </style>
+<script>  
+function validateform(){  
+var userEmail=document.myform.userEmail.value;  
+var userPassword=document.myform.userPassword.value;  
+  
+if (userEmail==null || userEmail==""){  
+  alert("Name can't be blank");  
+  return false;  
+}else if(userPassword==null || userPassword==""){  
+  alert("Password must be at least 6 characters long.");  
+  return false;  
+  }  
+}  
+</script>  
 </head>
 <body>
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -76,13 +90,12 @@ body {
 
 	<div class="container">
 
-		<form:form method="POST" commandName="user" action="" class="form-signin">
+		<form:form method="POST" commandName="user" name="myForm" class="form-signin" onsubmit="return validateform()">
 			<h2 class="form-signin-heading">Log In</h2>
-			<form:input path="userEmail"  class="input-block-level" placeholder="Email address"/>
-			<form:errors path="userEmail" cssclass="error"/>
-			<form:password path="userPassword" class="input-block-level" placeholder="Password" />
-			<form:errors path="userPassword" cssClass="error"/>
+			<form:input path="userEmail" name="userEmail"  class="input-block-level" placeholder="Email address"/>
+			<form:password path="userPassword" name="userPassword" class="input-block-level" placeholder="Password" />
 			<input type="submit" value="Login" class="btn btn-large btn-success"/>
+			<br><font color="#ff0000">${loginError}</font>
 		</form:form>
 
 	</div>

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.model.Account;
+import com.spring.model.CreditCard;
 import com.spring.model.User;
 
 @Repository("accountDAO")
@@ -42,6 +43,18 @@ public class AccountDAOImpl implements AccountDAO {
 	@Override
 	public List<Account> getAllAccounts() {
 		return (List<Account>) sessionFactory.getCurrentSession().createCriteria(Account.class).list();
+	}
+
+	@Override
+	@Transactional
+	public void saveCreditCard(CreditCard cc) {
+		sessionFactory.getCurrentSession().save(cc);
+	}
+
+	@Override
+	@Transactional
+	public CreditCard getCrediCard(int id) {
+		return (CreditCard) sessionFactory.getCurrentSession().get(CreditCard.class, id);
 	}
 
 }

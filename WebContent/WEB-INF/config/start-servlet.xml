@@ -40,6 +40,9 @@ http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 				<value>com.spring.model.User</value>
 				<value>com.spring.model.Account</value>
 				<value>com.spring.model.Strategy</value>
+				<value>com.spring.model.CreditCard</value>
+				<value>com.spring.model.Visa</value>
+				<value>com.spring.model.MasterCard</value>
 				<value>com.betfair.entities.MarketCatalogue</value>
 				<value>com.betfair.entities.RunnerCatalogue</value>
 				<value>com.betfair.entities.Order</value>

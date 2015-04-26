@@ -21,7 +21,15 @@
 	type="text/javascript"></script>
 <link href="bootstrap/dist/css/carousel.css" rel="stylesheet"
 	type="text/css">
-
+	<style type="text/css">
+.slider-size {
+height: 400px; /* This is your slider height */
+}
+.carousel {
+width:100%; 
+margin:0 auto; /* center your carousel if other than 100% */ 
+}
+</style>
 </head>
 <!-- NAVBAR
 ================================================== -->
@@ -29,7 +37,7 @@
 	<div class="navbar-wrapper">
 		<div class="container">
 
-			<nav class="navbar navbar-inverse navbar-static-top">
+			<nav class="navbar navbar-inverse navbar-fixed-top">
 				<div class="container">
 					<div class="navbar-header">
 						<button type="button" class="navbar-toggle collapsed"
@@ -46,6 +54,7 @@
 							<li class="active"><a href="#">Home</a></li>
 							<c:if test="${empty sessionScope.user.firstName}">
 								<li><a href="loginform.html">Login</a></li>
+								<li><a href="register.html">Register</a></li>
 							</c:if>
 							<li><a href="contact.html">Contact</a></li>
 						</ul>
@@ -85,14 +94,14 @@
 		</ol>
 		<div class="carousel-inner" role="listbox">
 			<div class="item active">
-				<img src="bootstrap/img/Cheltenham.gif" alt="First slide">
+				<img src="bootstrap/img/slide2.gif" alt="First slide">
 				<div class="container">
 					<div class="carousel-caption">
 						<h1>Welcome to Catch The Monkey</h1>
-						<p>You can avail of a range of strategies that vary in risk,
+						<p><b>You can avail of a range of strategies that vary in risk,
 							return on investment (ROI) and complexity. All strategies are designed
 							to generate profit through different means via the Betfair
-							exchange.</p>
+							exchange.</b></p>
 						<p>
 							<a class="btn btn-lg btn-primary" href="register.html" role="button">Sign up today</a>
 						</p>
@@ -100,13 +109,13 @@
 				</div>
 			</div>
 			<div class="item">
-				<img src="bootstrap/img/slide2.gif" alt="Second slide">
+				<img src="bootstrap/img/slide3.gif" alt="Second slide">
 				<div class="container">
 					<div class="carousel-caption">
 					<h1>Investment</h1>
-						<p>Choose a strategy that best suits your risk profile and avail of monthly 
+						<p><b>Choose a strategy that best suits your risk profile and avail of monthly 
 						returns. The amount you invest is entirely up to you and you may retract
-						your investment at any point. </p>
+						your investment at any point.</b> </p>
 						<p>
 							<a class="btn btn-lg btn-primary" href="register.html"
 								role="button">Sign up today</a>
@@ -115,13 +124,13 @@
 				</div>
 			</div>
 			<div class="item">
-				<img src="bootstrap/img/slide3.gif" alt="Third slide">
+				<img src="bootstrap/img/slide1.jpg" alt="Third slide">
 				<div class="container">
 					<div class="carousel-caption">
 						<h1>View Daily Statistics</h1>
-						<p>Strategy and user performance is represented via modern graphing tools and
+						<p><b>Strategy and user performance is represented via modern graphing tools and
 						charts. All charts can be filtered to monitor performance by month. Improve
-						your knowledge of strategies by analysing daily charts./p>
+						your knowledge of strategies by analysing daily charts.</b></p>
 						<p>
 							<a class="btn btn-lg btn-primary" href="register.html"
 								role="button">Sign up today</a>
@@ -157,7 +166,7 @@
 				to generate profit using hedging techniques. Users must be aware of the risks.
 				</p>
 				<p>
-					<a class="btn btn-default" href="strategyChoice.html" role="button">View details
+					<a class="btn btn-large btn-success" href="strategyChoice.html" role="button">View details
 						&raquo;</a>
 				</p>
 			</div>
@@ -171,7 +180,7 @@
 				<p>Lucayan is a medium risk strategy and is an extension of Raglan Road.
 				Users are exposed to less risk and trading activity is less frequent.</p>
 				<p>
-					<a class="btn btn-default" href="strategyChoice.html" role="button">View details
+					<a class="btn btn-large btn-success" href="strategyChoice.html" role="button">View details
 						&raquo;</a>
 				</p>
 			</div>
@@ -185,7 +194,7 @@
 				<p>GingerMc is a low risk strategy. All trades are catious in 
 				nature and users face minimal exposure to risk but risk is not erradicated.</p>
 				<p>
-					<a class="btn btn-default" href="strategyChoice.html" role="button">View details
+					<a class="btn btn-large btn-success" href="strategyChoice.html" role="button">View details
 						&raquo;</a>
 				</p>
 			</div>

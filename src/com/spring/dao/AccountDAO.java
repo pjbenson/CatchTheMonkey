@@ -3,6 +3,7 @@ package com.spring.dao;
 import java.util.List;
 
 import com.spring.model.Account;
+import com.spring.model.CreditCard;
 import com.spring.model.Strategy;
 
 public interface AccountDAO {
@@ -14,4 +15,8 @@ public interface AccountDAO {
 	public void addStrategyToAccount(Account acc);
 	
 	public void updateAccount(Account acc);
+	
+	public void saveCreditCard(CreditCard cc);
+	
+	public CreditCard getCrediCard(int id);
 }

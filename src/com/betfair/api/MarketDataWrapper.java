@@ -77,7 +77,13 @@ public class MarketDataWrapper implements IMarketDataSource{
         System.out.println(requestString);
         
         HttpUtil requester = new HttpUtil();
-        String response = requester.sendPostRequestJsonRpc(requestString, operation);
+        String response = null;
+		try {
+			response = requester.sendPostRequestJsonRpc(requestString, operation);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         System.out.println(response);
         return response;
 	}

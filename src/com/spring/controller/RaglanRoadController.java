@@ -53,6 +53,7 @@ import com.googlecode.charts4j.Plot;
 import com.googlecode.charts4j.Plots;
 import com.googlecode.charts4j.Slice;
 import com.spring.controller.PieChartData.KeyValue;
+import com.spring.model.Account;
 import com.spring.model.Strategy;
 import com.spring.model.User;
 import com.spring.service.AccountService;
@@ -67,7 +68,9 @@ import com.spring.test.UserUIObject;
 @Controller
 @SessionAttributes({"strategy", "order", "runners", "rrLineChart", "rrBarChart"})
 public class RaglanRoadController {
-
+	
+	@Autowired
+	private AccountService accountService;
 	@Autowired
 	private RunnerService runnerService;
 	@Autowired
@@ -84,6 +87,8 @@ public class RaglanRoadController {
 
 	@RequestMapping(value="raglanroad", method = RequestMethod.GET)
 	public ModelAndView showRagalanRoad(ModelMap model) throws ParseException {
+		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		if(user==null)return new ModelAndView("redirect:/loginform.html");
 		String lineChart = (String) RequestContextHolder.currentRequestAttributes().getAttribute("rrLineChart", RequestAttributes.SCOPE_SESSION);
 		String barChart = (String) RequestContextHolder.currentRequestAttributes().getAttribute("rrLineChart", RequestAttributes.SCOPE_SESSION);
 		if(lineChart==null)model.put("rrLineChart", createLineChart(3).toURLString());
@@ -106,8 +111,8 @@ public class RaglanRoadController {
 		return new ModelAndView("raglanroad");
 	}
 
-	@RequestMapping(value = "/addCash", method = RequestMethod.POST)
-	public ModelAndView addCashToPool(@RequestParam("amount") Double amount){
+	@RequestMapping(value = "/addRRCash", method = RequestMethod.POST)
+	public ModelAndView addCashToPool(@RequestParam("amount") Double amount, ModelMap model){
 		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
 		Strategy raglanRoad = strategyService.getStrategy(1);
 		if(amount>user.getAccount().getBalance()){
@@ -118,13 +123,9 @@ public class RaglanRoadController {
 			user.getAccount().addToRaglanroad(amount);
 			user.getAccount().setBalance(user.getAccount().getBalance() - amount);
 			userService.updateBalance(user);
+			model.put("user", user);
 			return new ModelAndView("redirect:/raglanroad.html");
 		}
-	}
-
-	@RequestMapping(value = "/month", method = RequestMethod.POST)
-	public ModelAndView sortLineChartByMonth(@RequestParam Integer val, ModelMap model){
-		return new ModelAndView("redirect:/index.html");
 	}
 	
 	@RequestMapping(value="/barChartMonth/{id}")
@@ -177,7 +178,7 @@ public class RaglanRoadController {
 		chart.addYAxisLabels(AxisLabelsFactory.newNumericRangeAxisLabels(0, 100));
 		chart.addYAxisLabels(score);
 		chart.addXAxisLabels(year);
-
+		chart.setTitle("("+months[month]+")", BLACK, 14);
 		chart.setSize(600, 450);
 		chart.setBarWidth(25);
 		chart.setSpaceWithinGroupsOfBars(20);
@@ -215,7 +216,6 @@ public class RaglanRoadController {
 		if(count!=0){
 			for (Map.Entry<Date, Double> entry : orderedReturns.entrySet())
 			{
-				//TODO remove conditions when Data.scale is implemented 
 				if(entry.getKey().getMonth() == month){
 					Integer temp = entry.getKey().getDate();
 					String date = Integer.toString(temp);
@@ -365,7 +365,8 @@ public class RaglanRoadController {
 	}
 
 	private String getDateUserInvested(){
-		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		User u = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		User user = userService.getUser(u.getUserId());
 		if(user == null)return null;
 		SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
 		String date = fmt.format(user.getAccount().getRaglanRegisterDate());

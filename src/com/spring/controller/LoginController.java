@@ -23,7 +23,7 @@ import com.spring.service.LoginService;
 import com.spring.service.UserService;
 
 @Controller
-@SessionAttributes("user")
+@SessionAttributes({"user", "loginError"})
 @RequestMapping("loginform.html")
 public class LoginController {
 
@@ -39,17 +39,13 @@ public class LoginController {
 
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView processForm(@ModelAttribute("user")@Valid User user, BindingResult result, Map model) {
-
-		if (result.hasErrors()) {
-			return new ModelAndView("loginform.html");
-		}
-		System.out.println("Error count: " +result.getErrorCount());
+	public ModelAndView processForm(@ModelAttribute("user")@Valid User user, Map model) {
 		User currentUser = loginService.checkLogin(user.getUserEmail(), user.getUserPassword());
 		if(currentUser != null){
 			model.put("user", currentUser);
 			return new ModelAndView("redirect:/profile.html");
 		}else{
+			model.put("loginError", "Error, please re-enter your details!");
 			return new ModelAndView("redirect:/loginform.html");
 		}
 	}

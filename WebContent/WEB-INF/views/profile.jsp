@@ -29,56 +29,55 @@
 	type="text/javascript"></script>
 
 <!-- CSS code from Bootply.com editor -->
-
 <style type="text/css">
-footer {
-	margin-top: 20px;
-	padding-top: 20px;
-	padding-bottom: 20px;
-	background-color: #efefef;
-}
+      html, body {
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+      }
 
-.container {
-	width: 0 auto;
-	margin: 0 auto;
-	margin-left: 250px;
-}
+      #full-screen-background-image {
+        z-index: -999;
+        min-height: 100%;
+        min-width: 1024px;
+        width: 100%;
+        height: auto;
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
 
-/* count indicator near icons */
-.nav>li .count {
-	position: absolute;
-	bottom: 12px;
-	right: 6px;
-	font-size: 9px;
-	background: rgba(51, 200, 51, 0.55);
-	color: rgba(255, 255, 255, 0.9);
-	line-height: 1em;
-	padding: 2px 4px;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	-ms-border-radius: 10px;
-	-o-border-radius: 10px;
-	border-radius: 10px;
-}
+      #wrapper {
+        position: relative;
+        width: 800px;
+        min-height: 400px;
+        margin: 100px auto;
+        color: #333;
+      }
 
-/* indent 2nd level */
-.list-unstyled li>ul>li {
-	margin-left: 10px;
-	padding: 8px;
-}
-</style>
+      a.to-top:link,
+      a.to-top:visited, 
+      a.to-top:hover {
+        margin-top: 1000px;
+        display: block;
+        font-weight: bold;
+        padding-bottom: 30px;
+        font-size: 30px;
+      }
+
+    </style>
+
 </head>
 
 <!-- HTML code from Bootply.com editor -->
 
 <body>
-
+<img src="bootstrap/img/Cheltenham.gif" id="full-screen-background-image" /> 
 	<!-- Header -->
-	<div class="navbar-wrapper" role="main">
-		<div class="container-fluid">
-
-			<nav class="navbar navbar-inverse navbar-static-top">
-				<div class="container-fluid">
+	
+			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+				<div class="container">
 					<div class="navbar-header">
 						<button type="button" class="navbar-toggle collapsed"
 							data-toggle="collapse" data-target="#navbar"
@@ -92,45 +91,46 @@ footer {
 					<div id="navbar" class="navbar-collapse collapse">
 						<ul class="nav navbar-nav">
 							<li class="active"><a href="">Profile</a></li>
-							<li><a href="#contact">Contact</a></li>
+							<li><a href="contact.html">Contact</a></li>
 							<li class="dropdown"><a href="#" class="dropdown-toggle"
 								data-toggle="dropdown" role="button" aria-expanded="false">Options
 									<span class="caret"></span>
 							</a>
 								<ul class="dropdown-menu" role="menu">
-									<li><a href="updateBalance.html">Add Cash</a></li>
-									<li><a href="strategyChoice.html">Add Strategy</a></li>
-									<li><a
-										href="${pageContext.request.contextPath}/logout.html">Logout</a></li>
+									<li><a href="updateBalance.html">Update Wallet</a></li>
+									<li><a href="strategyChoice.html">Invest in Strategy</a></li>
+									<li><a href="creditcard.html">Add Credit Card</a></li>
 								</ul></li>
 						</ul>
+						<ul class="nav navbar-nav navbar-right">
+								<li><a ><i class="glyphicon glyphicon-user"></i>
+										${sessionScope.user.firstName}</a>
+								<li><a href="#">Wallet: <i
+										class="glyphicon glyphicon-euro"></i>${sessionScope.user.account.balance}</a></li>
+								<li><a
+									href="${pageContext.request.contextPath}/logout.html"><i
+										class="glyphicon glyphicon-lock"></i>Logout</a></li>
+							</ul>
 					</div>
-
-				</div>
+					</div>
 			</nav>
 
-		</div>
-	</div>
+
+
 
 	<!-- /Header -->
-
+	<hr>
+	<hr>
 	<!-- Main -->
 	<div class="container">
 		<div class="row">
-			<div class="col-md-8 col-xs-10">
+			<div class="col-md-12 col-xs-10">
 				<div class="well panel panel-default">
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-xs-12 col-sm-4 text-center">
-								<img src="bootstrap/img/photo.jpg" alt=""
+								<img src="bootstrap/img/avatar.jpg" alt=""
 									class="center-block img-circle img-thumbnail img-responsive">
-								<ul class="list-inline ratings text-center" title="Ratings">
-									<li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
-									<li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
-									<li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
-									<li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
-									<li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
-								</ul>
 							</div>
 							<!--/col-->
 							<div class="col-xs-12 col-sm-8">

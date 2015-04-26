@@ -17,6 +17,10 @@
 		<servlet-name>start-servlet</servlet-name>
 		<url-pattern>*.html</url-pattern>
 	</servlet-mapping>
-	
+
+	<listener>
+		<listener-class>com.betfair.main.Listener</listener-class>
+	</listener>
+
 
 </web-app>

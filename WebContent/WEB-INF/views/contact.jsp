@@ -21,15 +21,54 @@
 	type="text/javascript"></script>
 <link href="bootstrap/dist/css/carousel.css" rel="stylesheet"
 	type="text/css">
+<style type="text/css">
+      html, body {
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+      }
 
+      #full-screen-background-image {
+        z-index: -999;
+        min-height: 100%;
+        min-width: 1024px;
+        width: 100%;
+        height: auto;
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
+
+      #wrapper {
+        position: relative;
+        width: 800px;
+        min-height: 400px;
+        margin: 100px auto;
+        color: #333;
+      }
+
+      a.to-top:link,
+      a.to-top:visited, 
+      a.to-top:hover {
+        margin-top: 1000px;
+        display: block;
+        font-weight: bold;
+        padding-bottom: 30px;
+        font-size: 30px;
+      }
+
+    </style>
 </head>
 <!-- NAVBAR
 ================================================== -->
 <body>
+	<img src="bootstrap/img/balla.jpg" id="full-screen-background-image" /> 
+	<div class="container">
 	<div class="navbar-wrapper">
-		<div class="container">
+		
 
-			<nav class="navbar navbar-inverse navbar-static-top">
+			<nav class="navbar navbar-inverse navbar-fixed-top">
 				<div class="container">
 					<div class="navbar-header">
 						<button type="button" class="navbar-toggle collapsed"
@@ -43,9 +82,10 @@
 					</div>
 					<div id="navbar" class="navbar-collapse collapse">
 						<ul class="nav navbar-nav">
-							<li><a href="index.html">Home</a></li>
+							<li class="active"><a href="#">Home</a></li>
 							<c:if test="${empty sessionScope.user.firstName}">
 								<li><a href="loginform.html">Login</a></li>
+								<li><a href="register.html">Register</a></li>
 							</c:if>
 							<li><a href="contact.html">Contact</a></li>
 						</ul>
@@ -72,5 +112,6 @@
 
 		</div>
 	</div>
+	
 </body>
 </html>

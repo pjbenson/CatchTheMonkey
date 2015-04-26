@@ -26,7 +26,7 @@ public class HttpUtil {
         super();
     }
 
-    private String sendPostRequest(String param, String operation, String URL, ResponseHandler<String> reqHandler){
+    private String sendPostRequest(String param, String operation, String URL, ResponseHandler<String> reqHandler) throws Exception{
         String jsonRequest = param;
 
         HttpPost post = new HttpPost(URL);
@@ -36,7 +36,7 @@ public class HttpUtil {
             post.setHeader(HTTP_HEADER_ACCEPT, "application/json");
             post.setHeader(HTTP_HEADER_ACCEPT_CHARSET, "UTF-8");
             post.setHeader(HTTP_HEADER_X_APPLICATION, "XaBM5CwzIU1oLrgw");
-            post.setHeader(HTTP_HEADER_X_AUTHENTICATION, "eoAcxr6gy0ZmuslWnWP1xn14EcWd4EU28JxqdYBLM6s=");
+            post.setHeader(HTTP_HEADER_X_AUTHENTICATION, HttpClientSSO.obtainSessionKey());
             post.setEntity(new StringEntity(jsonRequest, "UTF-8"));
 
             HttpClient httpClient = new DefaultHttpClient();
@@ -62,7 +62,7 @@ public class HttpUtil {
 
     }
 
-    public String sendPostRequestJsonRpc(String param, String operation) {
+    public String sendPostRequestJsonRpc(String param, String operation) throws Exception {
         String apiNgURL = "https://api.betfair.com/exchange/betting/" + "json-rpc/v1";
 
         return sendPostRequest(param, operation, apiNgURL, new JsonResponseHandler());

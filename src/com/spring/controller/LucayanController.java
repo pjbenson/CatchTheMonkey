@@ -21,6 +21,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -75,8 +76,10 @@ public class LucayanController {
 
 	@RequestMapping(value="lucayan", method = RequestMethod.GET)
 	public ModelAndView showLucayan(ModelMap model){
+		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		if(user==null)return new ModelAndView("redirect:/loginform.html");
 		String lineChart = (String) RequestContextHolder.currentRequestAttributes().getAttribute("lucLineChart", RequestAttributes.SCOPE_SESSION);
-		String barChart = (String) RequestContextHolder.currentRequestAttributes().getAttribute("rrLineChart", RequestAttributes.SCOPE_SESSION);
+		String barChart = (String) RequestContextHolder.currentRequestAttributes().getAttribute("lucBarChart", RequestAttributes.SCOPE_SESSION);
 		if(lineChart==null)model.put("lucLineChart", createLineChart(3).toURLString());
 		if(barChart==null)model.put("lucBarChart", createBarChart(3).toURLString());
 		
@@ -94,7 +97,8 @@ public class LucayanController {
 	}
 
 	private String getDateUserInvested() {
-		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		User u = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		User user = userService.getUser(u.getUserId());
 		if(user == null)return null;
 		SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
 		String date = fmt.format(user.getAccount().getRaglanRegisterDate());
@@ -117,6 +121,23 @@ public class LucayanController {
 		if(user == null || user.getAccount().getLucayanReturns() == null)return 0.0;
 
 		return user.getAccount().getLucayanReturns();
+	}
+	
+	@RequestMapping(value = "/addLucCash", method = RequestMethod.POST)
+	public ModelAndView addCashToPool(@RequestParam("amount") Double amount, ModelMap model){
+		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		Strategy lucayan = strategyService.getStrategy(3);
+		if(amount>user.getAccount().getBalance()){
+			return new ModelAndView("redirect:/lucayan.html");
+		}else{
+			lucayan.addToPool(amount);
+			strategyService.addAccountToStrategy(lucayan);
+			user.getAccount().addToLucayan(amount);
+			user.getAccount().setBalance(user.getAccount().getBalance() - amount);
+			userService.updateBalance(user);
+			model.put("user", user);
+			return new ModelAndView("redirect:/lucayan.html");
+		}
 	}
 
 	@RequestMapping(value="/lucBarChartMonth/{id}")
@@ -169,7 +190,7 @@ public class LucayanController {
 		chart.addYAxisLabels(AxisLabelsFactory.newNumericRangeAxisLabels(0, 100));
 		chart.addYAxisLabels(score);
 		chart.addXAxisLabels(year);
-
+		chart.setTitle("("+months[month]+")", BLACK, 14);
 		chart.setSize(600, 450);
 		chart.setBarWidth(25);
 		chart.setSpaceWithinGroupsOfBars(20);

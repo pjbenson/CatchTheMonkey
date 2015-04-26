@@ -72,6 +72,7 @@ public class RaglanRoad implements IStrategy{
 		}
 		
 		for(MarketBook mb: marketBooks){
+			if(mb.getRunners().size() < 3)continue;
 			price1 = mb.getRunners().get(0).getEx().getAvailableToBack().get(0).getPrice();
 			price2 = mb.getRunners().get(1).getEx().getAvailableToBack().get(0).getPrice();
 			price3 = mb.getRunners().get(2).getEx().getAvailableToBack().get(0).getPrice();

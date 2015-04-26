@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.dao.AccountDAO;
 import com.spring.model.Account;
+import com.spring.model.CreditCard;
 import com.spring.model.Strategy;
 @Service
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -35,6 +36,16 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public List<Account> getAllAcounts() {
 		return accountDao.getAllAccounts();
+	}
+
+	@Override
+	public void saveCreditCard(CreditCard cc) {
+		accountDao.saveCreditCard(cc);
+	}
+
+	@Override
+	public CreditCard getCrediCard(int id) {
+		return accountDao.getCrediCard(id);
 	}
 
 }

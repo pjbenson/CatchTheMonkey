@@ -69,6 +69,7 @@ public class Lucayan implements IStrategy {
 		}
 		
 		for(MarketBook mb: marketBooks){
+			if(mb.getRunners().size() < 3)continue;
 			price1 = mb.getRunners().get(0).getEx().getAvailableToBack().get(0).getPrice();
 			price2 = mb.getRunners().get(1).getEx().getAvailableToBack().get(0).getPrice();
 			price3 = mb.getRunners().get(2).getEx().getAvailableToBack().get(0).getPrice();
@@ -183,7 +184,7 @@ public class Lucayan implements IStrategy {
 		List<MarketCatalogue> result = new ArrayList<MarketCatalogue>();
 		// 
 		for(MarketCatalogue marketCatalogue: listMarketCatalogue){
-			if(marketCatalogue.getMarketName().contains("Nov") && marketCatalogue.getMarketName().contains("Chs") && !marketCatalogue.getMarketName().contains("Hcap")){
+			if(marketCatalogue.getMarketName().contains("Nov") && marketCatalogue.getMarketName().contains("Hunt") && marketCatalogue.getMarketName().contains("Chs") && !marketCatalogue.getMarketName().contains("Hcap")){
 				result.add(marketCatalogue);
 				persister.persistRunnerCatalogue(marketCatalogue.getRunners().get(0));
 				persister.persistRunnerCatalogue(marketCatalogue.getRunners().get(1));

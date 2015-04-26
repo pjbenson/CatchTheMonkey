@@ -94,7 +94,9 @@ public class StrategyController {
 	@RequestMapping(value = "/strategy1", method = RequestMethod.POST)
 	public ModelAndView chooseStrategy1(@ModelAttribute("strategy") Strategy strategy, ModelMap model) throws ParseException {
 		ModelAndView modelAndView = new ModelAndView();
-		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		User u = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		User user = userService.getUser(u.getUserId());
+		if(user==null)return new ModelAndView("redirect:/loginform.html");
 		if(user.getAccount().getRaglanRegisterDate() != null){
 			return new ModelAndView("redirect:/raglanroad.html");
 		}
@@ -116,7 +118,9 @@ public class StrategyController {
 	@RequestMapping(value = "/strategy2", method = RequestMethod.POST)
 	public ModelAndView chooseStrategy2(@ModelAttribute("strategy") Strategy strategy, ModelMap model) throws ParseException {
 		ModelAndView modelAndView = new ModelAndView();
-		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		User u = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		User user = userService.getUser(u.getUserId());
+		if(user==null)return new ModelAndView("redirect:/loginform.html");
 		if(user.getAccount().getGingerRegisterDate() != null){
 			return new ModelAndView("redirect:/gingermc.html");
 		}
@@ -136,7 +140,9 @@ public class StrategyController {
 	@RequestMapping(value = "/strategy3", method = RequestMethod.POST)
 	public ModelAndView chooseStrategy3(@ModelAttribute("strategy") Strategy strategy, ModelMap model) throws ParseException {
 		ModelAndView modelAndView = new ModelAndView();
-		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		User u = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		User user = userService.getUser(u.getUserId());
+		if(user==null)return new ModelAndView("redirect:/loginform.html");
 		if(user.getAccount().getLucayanRegisterDate() != null){
 			return new ModelAndView("redirect:/lucayan.html");
 		}

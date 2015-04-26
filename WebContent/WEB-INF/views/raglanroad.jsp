@@ -68,59 +68,8 @@
 		});
 	});
 </script>
-<script type="text/javascript">
-	function doAjax(x) {
-		$.ajax({
-			type : "POST",
-			url : 'month.html',
-			data : ({
-				val : x
-			}),
-			success : function(data) {
-				$('#month').html(data);
-			}
-		});
-	}
-</script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script type="text/javascript">
-	// Load the Visualization API and the piechart package.
-	google.load('visualization', '1.0', {
-		'packages' : [ 'corechart' ]
-	});
 
-	// Set a callback to run when the Google Visualization API is loaded.
-	google.setOnLoadCallback(drawChart);
-
-	// Callback that creates and populates a data table,
-	// instantiates the pie chart, passes in the data and
-	// draws it.
-	function drawChart() {
-
-		// Create the data table.    
-		var data = google.visualization.arrayToDataTable([
-				[ 'Country', 'Area(square km)' ],
-				<c:forEach items="${pie}" var="entry">['${entry.key}',
-						${entry.value}], </c:forEach> ]);
-		// Set chart options
-		var options = {
-			'title' : 'Area-wise Top Seven Countries in the World',
-			is3D : true,
-			pieSliceText : 'label',
-			tooltip : {
-				showColorCode : true
-			},
-			'width' : 600,
-			'height' : 500,
-			backgroundColor : '#f1f8e9'
-		};
-
-		// Instantiate and draw our chart, passing in some options.
-		var chart = new google.visualization.PieChart(document
-				.getElementById('chart_div'));
-		chart.draw(data, options);
-	}
-</script>
 </head>
 
 <body>
@@ -290,7 +239,7 @@
 
 							<div class="modal-body">
 								<!-- The form is placed inside the body of modal -->
-								<form:form id="addCash" method="POST" action="/CTM/addCash.html"
+								<form:form id="addCash" method="POST" action="/CTM/addRRCash.html"
 									class="form-horizontal">
 									<div class="form-group">
 										<label class="col-xs-3 control-label">Amount</label>
@@ -317,70 +266,6 @@
 					<!-- /.panel-heading -->
 					<div class="panel-body">
 						<img alt="Return Pie Chart" src="${pieChart}" width="610px" />
-					</div>
-					<!-- /.panel-body -->
-				</div>
-				
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<i class="fa fa-bar-chart-o fa-fw"></i> Test
-					</div>
-					<script>
-					google.load('visualization', '1.1', {packages: ['line', 'corechart']});
-    google.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-
-      var classicChart;
-      var classicDiv = document.getElementById('classic');
-
-      var data = new google.visualization.DataTable();
-      data.addColumn('date', 'Month');
-      data.addColumn('number', "RaglanRoad");
-
-      data.addRows([
-        [new Date(2015, 0),  -.5],
-        [new Date(2015, 1),   .4],
-        [new Date(2015, 2),   .5],
-        [new Date(2015, 3),  2.9],
-        [new Date(2015, 4),  6.3],
-        [new Date(2015, 5),    9],
-        [new Date(2015, 6), 10.6],
-        [new Date(2015, 7), 10.3],
-        [new Date(2015, 8),  7.4],
-        [new Date(2015, 9),  4.4],
-        [new Date(2015, 10), 1.1],
-        [new Date(2015, 11), -.2]
-      ]);
-
-      var classicOptions = {
-        width: 600,
-        height: 500,
-        backgroundColor: '#f1f8e9',
-        // Gives each series an axis that matches the vAxes number below.
-        series: {
-          0: {targetAxisIndex: 0},
-          1: {targetAxisIndex: 1}
-        },
-        vAxes: {
-          // Adds titles to each axis.
-          0: {title: 'ROI'},
-          1: {title: 'Month'}
-        },
-        vAxis: {
-          viewWindow: {
-            max: 40
-          }
-        }
-      };
-	  classicChart = new google.visualization.LineChart(classicDiv);
-
-      classicChart.draw(data, classicOptions);
-    }
-    </script>
-					<!-- /.panel-heading -->
-					<div class="panel-body">
-					<div id="classic" ></div>
 					</div>
 					<!-- /.panel-body -->
 				</div>
@@ -461,17 +346,76 @@
 					<!-- /.panel-body -->
 				</div>
 				<!-- /.panel -->
+				
+				<!-- /.panel .chat-panel -->
+			</div>
+			<div class="col-lg-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<i class="fa fa-line-chart fa-fw"></i>Strategy Performance
-						Comparison
+						<i class="fa fa-bar-chart-o fa-fw"></i> Test
 					</div>
+					
+					<script>
+					google.load('visualization', '1.1', {packages: ['line', 'corechart']});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var classicChart;
+      var classicDiv = document.getElementById('classic');
+      var data = new google.visualization.DataTable();
+      data.addColumn('date', 'Month');
+      data.addColumn('number', "Raglan Road");
+      data.addColumn('number', "GingerMc");
+      data.addColumn('number', "Lucayan");
+
+      data.addRows([
+        [new Date(2014, 0),  -.5,  5, 20],
+        [new Date(2014, 1),   .4,  8.7, 20],
+        [new Date(2014, 2),   .5,   12, 20],
+        [new Date(2014, 3),  2.9, 15.3, 20],
+        [new Date(2014, 4),  6.3, 18.6, 20],
+        [new Date(2014, 5),    9, 20.9, 20],
+        [new Date(2014, 6), 10.6, 19.8, 20],
+        [new Date(2014, 7), 10.3, 16.6, 20],
+        [new Date(2014, 8),  7.4, 13.3, 20],
+        [new Date(2014, 9),  4.4,  9.9, 20],
+        [new Date(2014, 10), 1.1,  6.6, 20],
+        [new Date(2014, 11), -.2,  4.5, 20]
+      ]);
+      var classicOptions = {
+        width: 1300,
+        height: 500,
+        backgroundColor: '#f1f8e9',
+        // Gives each series an axis that matches the vAxes number below.
+        series: {
+          0: {targetAxisIndex: 0},
+          1: {targetAxisIndex: 1}
+        },
+        vAxes: {
+          // Adds titles to each axis.
+          0: {title: 'ROI'},
+        },
+        hAxis: {
+            ticks: [new Date(2014, 0), new Date(2014, 1), new Date(2014, 2), new Date(2014, 3),
+                    new Date(2014, 4),  new Date(2014, 5), new Date(2014, 6), new Date(2014, 7),
+                    new Date(2014, 8), new Date(2014, 9), new Date(2014, 10), new Date(2014, 11)
+                   ]
+          },
+        vAxis: {
+          viewWindow: {
+            max: 40
+          }
+        }
+      };
+	  classicChart = new google.visualization.LineChart(classicDiv);
+      classicChart.draw(data, classicOptions);
+    }
+    </script>
+					<!-- /.panel-heading -->
 					<div class="panel-body">
-						<div id="chart_div"></div>
+						<div id="classic"></div>
 					</div>
 					<!-- /.panel-body -->
 				</div>
-				<!-- /.panel .chat-panel -->
 			</div>
 			<!-- /.col-lg-4 -->
 		</div>
