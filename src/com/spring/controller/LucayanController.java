@@ -57,7 +57,7 @@ import com.spring.service.UserService;
 import com.spring.test.UserUIObject;
 
 @Controller
-@SessionAttributes({"strategy", "order", "runners", "lucLineChart","lucBarChart"})
+@SessionAttributes({"strategy", "order", "runners", "lucLineChart","lucBarChart", "lucList"})
 public class LucayanController {
 
 	@Autowired
@@ -78,6 +78,7 @@ public class LucayanController {
 	public ModelAndView showLucayan(ModelMap model){
 		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
 		if(user==null)return new ModelAndView("redirect:/loginform.html");
+		if(user.getAccount().getLucayanRegisterDate()==null)return new ModelAndView("redirect:/strategyChoice.html");
 		String lineChart = (String) RequestContextHolder.currentRequestAttributes().getAttribute("lucLineChart", RequestAttributes.SCOPE_SESSION);
 		String barChart = (String) RequestContextHolder.currentRequestAttributes().getAttribute("lucBarChart", RequestAttributes.SCOPE_SESSION);
 		if(lineChart==null)model.put("lucLineChart", createLineChart(3).toURLString());
@@ -86,7 +87,7 @@ public class LucayanController {
 		Strategy lucayan = strategyService.getStrategy(3);
 		PieChart pieChart = createPieChart();
 
-		model.put("list", getDataForRunnerTable());
+		model.put("lucList", getDataForRunnerTable());
 		model.put("strategy", lucayan);
 		model.addAttribute("pieChart", pieChart.toURLString());
 		model.addAttribute("signUpDate", getDateUserInvested());
@@ -94,33 +95,6 @@ public class LucayanController {
 		model.addAttribute("totalReturn", getTotalReturnForStrategy());
 		model.addAttribute("totalUserReturn", getUserPercentageOfTotalReturn());
 		return new ModelAndView("lucayan");
-	}
-
-	private String getDateUserInvested() {
-		User u = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
-		User user = userService.getUser(u.getUserId());
-		if(user == null)return null;
-		SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
-		String date = fmt.format(user.getAccount().getRaglanRegisterDate());
-		return date;
-	}
-
-	private Double getTotalReturnForStrategy() {
-		List<Result> results =  resultsService.getResults();
-		Double total = 0.0;
-
-		for(Result result: results){
-			if(result.getStrategyId()==3)
-				total = total + result.getAmount();
-		}
-		return total;
-	}
-
-	private Double getUserPercentageOfTotalReturn() {
-		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
-		if(user == null || user.getAccount().getLucayanReturns() == null)return 0.0;
-
-		return user.getAccount().getLucayanReturns();
 	}
 	
 	@RequestMapping(value = "/addLucCash", method = RequestMethod.POST)
@@ -139,11 +113,35 @@ public class LucayanController {
 			return new ModelAndView("redirect:/lucayan.html");
 		}
 	}
+	
+	@RequestMapping(value = "/removeLucCash", method = RequestMethod.POST)
+	public ModelAndView removeCashFromPool(@RequestParam("amount") Double amount, ModelMap model){
+		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		Strategy lucayan = strategyService.getStrategy(3);
+		if(amount>user.getAccount().getLucayan()){
+			return new ModelAndView("redirect:/lucayan.html");
+		}else{
+			lucayan.removeFromPool(amount);
+			strategyService.addAccountToStrategy(lucayan);
+			user.getAccount().removeFromLucayan(amount);
+			user.getAccount().setBalance(user.getAccount().getBalance() + amount);
+			userService.updateBalance(user);
+			model.put("user", user);
+			return new ModelAndView("redirect:/lucayan.html");
+		}
+	}
 
 	@RequestMapping(value="/lucBarChartMonth/{id}")
 	public ModelAndView updateBarChart(@PathVariable("id") Integer id, ModelMap model){
 		BarChart barChart = createBarChart(id);
 		model.put("lucBarChart", barChart.toURLString());
+		return new ModelAndView("redirect:/lucayan.html");
+	}
+	
+	@RequestMapping(value="/updateLucayanLineChart/{id}")
+	public ModelAndView updateLineChartByMonth(@PathVariable("id") Integer id, ModelMap model) throws ParseException{
+		LineChart lineChart = createLineChart(id);
+		model.addAttribute("lucLineChart", lineChart.toURLString());
 		return new ModelAndView("redirect:/lucayan.html");
 	}
 
@@ -202,13 +200,6 @@ public class LucayanController {
 		chart.setAreaFill(fill);
 
 		return chart;
-	}
-
-	@RequestMapping(value="/updateLucayanLineChart/{id}")
-	public ModelAndView updateLineChartByMonth(@PathVariable("id") Integer id, ModelMap model) throws ParseException{
-		LineChart lineChart = createLineChart(id);
-		model.addAttribute("lucLineChart", lineChart.toURLString());
-		return new ModelAndView("redirect:/lucayan.html");
 	}
 
 	private LineChart createLineChart(Integer month) {
@@ -323,6 +314,41 @@ public class LucayanController {
 		colours.add(Color.newColor("01A1DB"));
 		return colours;
 	}
+	
+	private String getDateUserInvested() {
+		User u = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		User user = userService.getUser(u.getUserId());
+		if(user == null)return null;
+		SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
+		String date = fmt.format(user.getAccount().getRaglanRegisterDate());
+		return date;
+	}
+
+	private Double getTotalReturnForStrategy() {
+		List<Result> results =  resultsService.getResults();
+		Double total = 0.0;
+
+		for(Result result: results){
+			if(result.getStrategyId()==3)
+				total = total + result.getAmount();
+		}
+		return total;
+	}
+
+	private Double getUserPercentageOfTotalReturn() {
+		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		if(user == null || user.getAccount().getLucayanReturns() == null)return 0.0;
+		Double total = 0.0;
+		for(Result result: resultsService.getResults()){
+			if(user.getAccount().getGingerRegisterDate().after(result.getDate()) && result.getStrategyId()==3){
+				total += result.getAmount();
+			}
+		}
+		
+		Strategy luc = strategyService.getStrategy(3);
+		Double userPercentage = (double) Math.round((user.getAccount().getRaglanroad()/luc.getPool())*total);
+		return userPercentage;
+	}
 
 	private Map<Date, Double> getAverageDailyReturns(List<UserUIObject> runners){
 		Map<Date, Double> map = new HashMap<Date, Double>();
@@ -343,6 +369,7 @@ public class LucayanController {
 		int index = 0;
 
 		for(MarketCatalogue mc: markets){
+			//TODO today.getDate()
 			if(mc.getMarketTime().getDate() == today.getDate() && mc.getMarketTime().getMonth() == today.getMonth() && mc.getStrategyId()==3){
 				if(index>2){
 					index = 0;

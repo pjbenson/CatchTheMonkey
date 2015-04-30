@@ -11,24 +11,39 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 
 <!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
 <!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 <title>Catch The Monkey</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <meta charset="utf-8">
 <title>Register</title>
 <!-- Le styles -->
-<link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css">
-<link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet"
+	type="text/css">
+<link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"
+	type="text/css" />
 <script type="text/javascript" src="bootstrap/dist/js/bootstrap.min.js"></script>
 <style type="text/css">
 body {
 	padding-top: 70px;
 	padding-bottom: 40px;
 	background-color: #f5f5f5;
+}
+
+#full-screen-background-image {
+	z-index: -999;
+	min-height: 100%;
+	min-width: 1024px;
+	width: 100%;
+	height: auto;
+	position: fixed;
+	top: 0;
+	left: 0;
 }
 
 .form-signin {
@@ -56,14 +71,16 @@ body {
 	padding: 7px 9px;
 }
 </style>
-  <style>
-    .error {
-    	color: red;
-    }
-  </style> 
+<style>
+.error {
+	color: red;
+}
+</style>
 </head>
 
 <body>
+<img src="bootstrap/img/balla.jpg"
+		id="full-screen-background-image" />
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
@@ -77,12 +94,12 @@ body {
 				<a class="navbar-brand" href="index.html">Catch the Monkey</a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
-						<ul class="nav navbar-nav">
-							<li class="active"><a href="index.html">Home</a></li>
-								<li><a href="loginform.html">Login</a></li>
-							<li><a href="contact.html">Contact</a></li>
-						</ul>
-					</div>
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#">Register</a></li>
+					<li><a href="loginform.html">Login</a></li>
+					<li><a href="contact.html">Contact</a></li>
+				</ul>
+			</div>
 		</div>
 	</nav>
 
@@ -90,13 +107,20 @@ body {
 
 		<form:form method="POST" action="/CTM/save.html" class="form-signin">
 			<h2 class="form-signin-heading">Please Register</h2>
-			<form:input path="firstName" class="input-block-level" placeholder="First Name" value="${user.firstName}" />
-			<form:input path="lastName" class="input-block-level" placeholder="Last Name" value="${user.lastName}" />
-			<form:input path="email" class="input-block-level" placeholder="Email address" value="${user.userEmail}" />
-			<form:input path="age" class="input-block-level" placeholder="Age" value="${user.userAge}" />
-			<form:input path="password" type="password" class="input-block-level" placeholder="Password" value="${user.userPassword}" />
-			<input type="submit" value="Register" class="btn btn-large btn-success"/>
-			<br><font color="#ff0000">${registerError}</font>
+			<form:input path="firstName" class="input-block-level"
+				placeholder="First Name" value="${user.firstName}" />
+			<form:input path="lastName" class="input-block-level"
+				placeholder="Last Name" value="${user.lastName}" />
+			<form:input path="email" class="input-block-level"
+				placeholder="Email address" value="${user.userEmail}" />
+			<form:input path="age" class="input-block-level" placeholder="Age"
+				value="${user.userAge}" />
+			<form:input path="password" type="password" class="input-block-level"
+				placeholder="Password" value="${user.userPassword}" />
+			<input type="submit" value="Register"
+				class="btn btn-large btn-success" />
+			<br>
+			<font color="#ff0000">${registerError}</font>
 		</form:form>
 
 	</div>

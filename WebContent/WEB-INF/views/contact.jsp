@@ -22,51 +22,65 @@
 <link href="bootstrap/dist/css/carousel.css" rel="stylesheet"
 	type="text/css">
 <style type="text/css">
-      html, body {
-        height: 100%;
-        width: 100%;
-        padding: 0;
-        margin: 0;
-      }
+html, body {
+	height: 100%;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+}
 
-      #full-screen-background-image {
-        z-index: -999;
-        min-height: 100%;
-        min-width: 1024px;
-        width: 100%;
-        height: auto;
-        position: fixed;
-        top: 0;
-        left: 0;
-      }
+#full-screen-background-image {
+	z-index: -999;
+	min-height: 100%;
+	min-width: 1024px;
+	width: 100%;
+	height: auto;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
 
-      #wrapper {
-        position: relative;
-        width: 800px;
-        min-height: 400px;
-        margin: 100px auto;
-        color: #333;
-      }
+/* Main marketing message and sign up button */
+.jumbotron {
+	margin: 80px 450px;
+	text-align: center;
+	width: 300px;
+}
 
-      a.to-top:link,
-      a.to-top:visited, 
-      a.to-top:hover {
-        margin-top: 1000px;
-        display: block;
-        font-weight: bold;
-        padding-bottom: 30px;
-        font-size: 30px;
-      }
+.jumbotron .lead {
+	font-size: 24px;
+	line-height: 1.25;
+}
 
-    </style>
+.jumbotron .btn {
+	font-size: 21px;
+	padding: 14px 24px;
+}
+
+#wrapper {
+	position: relative;
+	width: 800px;
+	min-height: 400px;
+	margin: 100px auto;
+	color: #333;
+}
+
+a.to-top:link, a.to-top:visited, a.to-top:hover {
+	margin-top: 1000px;
+	display: block;
+	font-weight: bold;
+	padding-bottom: 30px;
+	font-size: 30px;
+}
+</style>
 </head>
 <!-- NAVBAR
 ================================================== -->
 <body>
-	<img src="bootstrap/img/balla.jpg" id="full-screen-background-image" /> 
+	<img src="bootstrap/img/leop.jpg" id="full-screen-background-image" />
 	<div class="container">
-	<div class="navbar-wrapper">
-		
+		<div class="navbar-wrapper">
+
 
 			<nav class="navbar navbar-inverse navbar-fixed-top">
 				<div class="container">
@@ -82,12 +96,10 @@
 					</div>
 					<div id="navbar" class="navbar-collapse collapse">
 						<ul class="nav navbar-nav">
-							<li class="active"><a href="#">Home</a></li>
 							<c:if test="${empty sessionScope.user.firstName}">
 								<li><a href="loginform.html">Login</a></li>
 								<li><a href="register.html">Register</a></li>
 							</c:if>
-							<li><a href="contact.html">Contact</a></li>
 						</ul>
 						<c:if test="${not empty sessionScope.user.firstName}">
 							<ul class="nav navbar-nav navbar-right">
@@ -111,7 +123,14 @@
 			</nav>
 
 		</div>
+		<div class="jumbotron">
+			<img src="bootstrap/img/photo.jpg" alt=""
+				class="center-block img-circle img-thumbnail img-responsive">
+			<br> <a href="https://ie.linkedin.com/pub/paul-benson/85/81b/388"><h2>Paul Benson</h2></a>
+			<p>C11712011</p>
+			<p>paul.benson@mydit.ie</p>
+		</div>
 	</div>
-	
+
 </body>
 </html>

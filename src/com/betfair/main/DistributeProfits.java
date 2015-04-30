@@ -22,11 +22,14 @@ public class DistributeProfits {
 
 	private EntityManagerFactory emf;
 	private EntityManager em;
+	private TimerHelper th;
 
 	public DistributeProfits() throws IOException, ParseException{
-		new ReadExcelFile();
+		new UpdateResults();
 		emf = Persistence.createEntityManagerFactory("CatchTheMonkey");
 		em = emf.createEntityManager();
+		th = new TimerHelper();
+		th.restartMyTimer();
 	}
 
 	private void disperseProfitsToUsers(){
@@ -71,12 +74,10 @@ public class DistributeProfits {
 	}
 
 	private class RunDistributeProfitTask extends TimerTask {
-
 		@Override
 		public void run() {
 			disperseProfitsToUsers();		
 		}
-
 	}
 	
 	private class TimerHelper {
@@ -87,7 +88,7 @@ public class DistributeProfits {
 	        runDate.set(Calendar.DAY_OF_MONTH, 1);
 	        runDate.set(Calendar.HOUR_OF_DAY, 4);
 	        runDate.set(Calendar.MINUTE, 0);
-	        runDate.add(Calendar.MONTH, 1);//set to next month
+	        runDate.add(Calendar.MONTH, 4);//set to next month
 
 	        RunDistributeProfitTask myTask = new RunDistributeProfitTask();
 	        Timer myTimer = new Timer();
@@ -95,7 +96,7 @@ public class DistributeProfits {
 	        myTimer.schedule(myTask, runDate.getTime());
 
 	        timersTable = new Hashtable();//keeping a reference to the timer so we 
-	        timersTable.put("1", myTimer);//have the option to cancel it later
+	        timersTable.put("4", myTimer);//have the option to cancel it later
 	    }
 	}
 

@@ -63,7 +63,7 @@ public class StrategyController {
 	@RequestMapping(value="strategyChoice", method = RequestMethod.GET)
 	public ModelAndView showStrategy(ModelMap model) {
 		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
-		if(user == null){
+		if(user.getFirstName() == null){
 			return new ModelAndView("strategyChoice");
 		}
 		else{

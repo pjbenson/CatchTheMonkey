@@ -66,7 +66,7 @@ import com.spring.service.UserService;
 import com.spring.test.UserUIObject;
 
 @Controller
-@SessionAttributes({"strategy", "order", "runners", "rrLineChart", "rrBarChart"})
+@SessionAttributes({"strategy", "order", "runners", "rrLineChart", "rrBarChart", "rrList"})
 public class RaglanRoadController {
 	
 	@Autowired
@@ -87,7 +87,9 @@ public class RaglanRoadController {
 
 	@RequestMapping(value="raglanroad", method = RequestMethod.GET)
 	public ModelAndView showRagalanRoad(ModelMap model) throws ParseException {
-		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		User u = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		User user = userService.getUser(u.getUserId());
+		if(user.getAccount().getRaglanRegisterDate()==null)return new ModelAndView("redirect:/strategyChoice.html");
 		if(user==null)return new ModelAndView("redirect:/loginform.html");
 		String lineChart = (String) RequestContextHolder.currentRequestAttributes().getAttribute("rrLineChart", RequestAttributes.SCOPE_SESSION);
 		String barChart = (String) RequestContextHolder.currentRequestAttributes().getAttribute("rrLineChart", RequestAttributes.SCOPE_SESSION);
@@ -99,7 +101,7 @@ public class RaglanRoadController {
 		List<KeyValue> pie = PieChartData.getPieDataList();
 		
 		model.addAttribute("pie", pie);
-		model.put("list", getDataForRunnerTable());
+		model.put("rrList", getDataForRunnerTable());
 		model.put("strategy", raglanRoad);
 		model.addAttribute("date", new Date());
 		model.addAttribute("number", 44);
@@ -128,6 +130,23 @@ public class RaglanRoadController {
 		}
 	}
 	
+	@RequestMapping(value = "/removeRRCash", method = RequestMethod.POST)
+	public ModelAndView removeCashFromPool(@RequestParam("amount") Double amount, ModelMap model){
+		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		Strategy raglanRoad = strategyService.getStrategy(1);
+		if(amount>user.getAccount().getRaglanroad()){
+			return new ModelAndView("redirect:/raglanroad.html");
+		}else{
+			raglanRoad.removeFromPool(amount);
+			strategyService.addAccountToStrategy(raglanRoad);
+			user.getAccount().removeFromRaglanRoad(amount);
+			user.getAccount().setBalance(user.getAccount().getBalance() + amount);
+			userService.updateBalance(user);
+			model.put("user", user);
+			return new ModelAndView("redirect:/raglanroad.html");
+		}
+	}
+	
 	@RequestMapping(value="/barChartMonth/{id}")
 	public ModelAndView updateBarChart(@PathVariable("id") Integer id, ModelMap model){
 		BarChart barChart = createBarChart(id);
@@ -138,6 +157,7 @@ public class RaglanRoadController {
 	private BarChart createBarChart(Integer month){
 		User u = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
 		User user = userService.getUser(u.getUserId());
+		Strategy rr = strategyService.getStrategy(1);
 		List<Result> results =  getRaglanRoadResults(resultsService.getResults());
 		Map<Date, Double> dailyReturns = getDailyReturns(results);
 		Map<Date, Double> orderedReturns = new TreeMap<Date, Double>(dailyReturns);
@@ -147,7 +167,7 @@ public class RaglanRoadController {
 		for (Map.Entry<Date, Double> entry : orderedReturns.entrySet())
 		{
 			if(entry.getKey().after(user.getAccount().getRaglanRegisterDate()) && entry.getKey().getMonth() == month){
-				Double profitPercentage = (user.getAccount().getRaglanroad()/100)*entry.getValue();
+				Double profitPercentage = (user.getAccount().getRaglanroad()/rr.getPool())*entry.getValue();
 				if(profitPercentage<0){
 					returns.add(0.0);
 				}else if(profitPercentage > 100){
@@ -315,6 +335,8 @@ public class RaglanRoadController {
 		int index = 0;
 
 		for(MarketCatalogue mc: markets){
+			System.out.println(today.getDate());
+			//TODO change date back to today
 			if(mc.getMarketTime().getDate() == today.getDate() && mc.getMarketTime().getMonth() == today.getMonth() && mc.getStrategyId()==1){
 				if(index>2){
 					index = 0;
@@ -361,7 +383,16 @@ public class RaglanRoadController {
 	private Double getUserPercentageOfTotalReturn(){
 		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
 		if(user == null || user.getAccount().getRaglanReturns() == null)return 0.0;
-		return user.getAccount().getRaglanReturns();
+		Double total = 0.0;
+		for(Result result: resultsService.getResults()){
+			if(user.getAccount().getRaglanRegisterDate().after(result.getDate()) && result.getStrategyId()==1){
+				total += result.getAmount();
+			}
+		}
+		
+		Strategy rr = strategyService.getStrategy(1);
+		Double userPercentage = (double) Math.round((user.getAccount().getRaglanroad()/rr.getPool())*total);
+		return userPercentage;
 	}
 
 	private String getDateUserInvested(){

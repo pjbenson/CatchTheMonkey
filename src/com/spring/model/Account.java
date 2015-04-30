@@ -107,9 +107,12 @@ public class Account implements Serializable {
 		return raglanroad;
 	}
 	public void addToRaglanroad(Double raglanroad) {
-		if(this.raglanroad == null)
-			this.raglanroad = 0.0;
+		if(this.raglanroad == null)this.raglanroad = 0.0;
 		this.raglanroad = this.raglanroad + raglanroad;
+	}
+	public void removeFromRaglanRoad(Double amount){
+		if(this.raglanroad == null)this.raglanroad = 0.0;
+		this.raglanroad = this.raglanroad - amount;
 	}
 	public Double getGingermc() {
 		return gingermc;
@@ -119,6 +122,10 @@ public class Account implements Serializable {
 			this.gingermc = 0.0;
 		this.gingermc = this.gingermc + gingermc;
 	}
+	public void removeFromGingerMc(Double amount){
+		if(this.gingermc == null)this.gingermc = 0.0;
+		this.gingermc = this.gingermc - amount;
+	}
 	public Double getLucayan() {
 		return lucayan;
 	}
@@ -126,6 +133,10 @@ public class Account implements Serializable {
 		if(this.lucayan == null)
 			this.lucayan = 0.0;
 		this.lucayan = this.lucayan + lucayan;
+	}
+	public void removeFromLucayan(Double amount){
+		if(this.lucayan == null)this.lucayan = 0.0;
+		this.lucayan = this.lucayan - amount;
 	}
 	public Date getRaglanRegisterDate() {
 		return raglanRegisterDate;

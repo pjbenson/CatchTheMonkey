@@ -6,6 +6,8 @@ import javax.servlet.ServletContextListener;
 import com.betfair.exceptions.APINGException;
 
 public class Listener implements ServletContextListener {
+	private MainDriver driver;
+	private DistributeProfits profits;
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
@@ -13,14 +15,13 @@ public class Listener implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
-//		MainDriver driver;
-//		try {
-////			driver = new MainDriver();
-////			driver.test();
-//		} catch (APINGException | Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
+		try {
+			driver = new MainDriver();
+			driver.executeStrategies();
+			profits = new DistributeProfits();
+		} catch (APINGException | Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

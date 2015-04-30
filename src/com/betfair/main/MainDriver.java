@@ -38,7 +38,7 @@ public class MainDriver {
 		}
 	}
 	
-	public void test() throws APINGException, Exception{
+	public void executeStrategies() throws APINGException, Exception{
 		new MainDriver();
 		TimerTask strategyTask = new RunStrategyTimerTask();
 		Timer timer = new Timer();

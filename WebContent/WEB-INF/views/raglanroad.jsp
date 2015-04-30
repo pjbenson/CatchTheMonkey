@@ -68,6 +68,29 @@
 		});
 	});
 </script>
+<script>
+	$(document).ready(function() {
+		$('removeCash').formValidation({
+			message : 'This value is not valid',
+			excluded : [ ':disabled' ],
+			framework : 'bootstrap',
+			icon : {
+				valid : 'glyphicon glyphicon-ok',
+				invalid : 'glyphicon glyphicon-remove',
+				validating : 'glyphicon glyphicon-refresh'
+			},
+			fields : {
+				amount : {
+					validators : {
+						notEmpty : {
+							message : 'Amount is required'
+						}
+					}
+				}
+			}
+		});
+	});
+</script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 </head>
@@ -91,6 +114,11 @@
 						href="${pageContext.request.contextPath}/index.html">Catch the
 						Monkey</a>
 				</div>
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="raglanroad.html"><font color="yellow">Raglan Road</font></a></li>
+					<li><a href="lucayan.html">Lucayan</a></li>
+					<li><a href="gingermc.html">GingerMc</a></li>
+				</ul>
 				<div id="navbar" class="navbar-collapse collapse">
 					<c:if test="${not empty sessionScope.user.firstName}">
 						<ul class="nav navbar-nav navbar-right">
@@ -101,8 +129,8 @@
 								<ul class="dropdown-menu" role="menu">
 									<li><a href="profile.html">My Profile</a></li>
 									<li><a href="updateBalance.html">Add To Wallet</a></li>
-									<li><a href="" data-target="#addCash" data-toggle="modal">Invest
-											in Raglan Road</a></li>
+									<li><a href="" data-target="#addCash" data-toggle="modal">Invest in Raglan Road</a></li>
+									<li><a href="" data-target="#removeCash" data-toggle="modal">Remove Investment</a></li>
 								</ul></li>
 							<li><a href="#">Wallet: <i
 									class="glyphicon glyphicon-euro"></i>${sessionScope.user.account.balance}</a></li>
@@ -161,22 +189,6 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<i class="fa fa-bar-chart-o fa-fw"></i> Todays runners
-						<div class="pull-right">
-							<div class="btn-group">
-								<button type="button"
-									class="btn btn-default btn-xs dropdown-toggle"
-									data-toggle="dropdown">
-									Actions <span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu pull-right" role="menu">
-									<li><a href="">Action</a></li>
-									<li><a href="#">Another action</a></li>
-									<li><a href="#">Something else here</a></li>
-									<li class="divider"></li>
-									<li><a href="#">Separated link</a></li>
-								</ul>
-							</div>
-						</div>
 					</div>
 					<!-- /.panel-heading -->
 					<div class="panel-body">
@@ -194,7 +206,7 @@
 											<th>Return per €100</th>
 										</tr>
 									</thead>
-									<c:forEach items="${list}" var="list">
+									<c:forEach items="${rrList}" var="list">
 										<tbody>
 											<c:if test="${sessionScope != null}">
 
@@ -239,8 +251,8 @@
 
 							<div class="modal-body">
 								<!-- The form is placed inside the body of modal -->
-								<form:form id="addCash" method="POST" action="/CTM/addRRCash.html"
-									class="form-horizontal">
+								<form:form id="addCash" method="POST"
+									action="/CTM/addRRCash.html" class="form-horizontal">
 									<div class="form-group">
 										<label class="col-xs-3 control-label">Amount</label>
 										<div class="col-xs-5">
@@ -250,6 +262,36 @@
 									<div class="form-group">
 										<div class="col-xs-5 col-xs-offset-3">
 											<button type="submit" class="btn btn-default">Add</button>
+										</div>
+									</div>
+								</form:form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal fade" id="removeCash" tabindex="-1" role="dialog"
+					aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+									aria-hidden="true">&times;</button>
+								<h4 class="modal-title">Investment Amount</h4>
+							</div>
+
+							<div class="modal-body">
+								<!-- The form is placed inside the body of modal -->
+								<form:form id="removeCash" method="POST"
+									action="/CTM/removeRRCash.html" class="form-horizontal">
+									<div class="form-group">
+										<label class="col-xs-3 control-label">Amount</label>
+										<div class="col-xs-5">
+											<input type="text" class="form-control" name="amount" />
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-xs-5 col-xs-offset-3">
+											<button type="submit" class="btn btn-default">Remove</button>
 										</div>
 									</div>
 								</form:form>
@@ -345,82 +387,73 @@
 					</div>
 					<!-- /.panel-body -->
 				</div>
-				<!-- /.panel -->
-				
-				<!-- /.panel .chat-panel -->
-			</div>
-			<div class="col-lg-12">
+
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<i class="fa fa-bar-chart-o fa-fw"></i> Test
+						<i class="fa fa-line-chart fa-fw"></i>Strategy Performance
+						Comparison
 					</div>
-					
-					<script>
-					google.load('visualization', '1.1', {packages: ['line', 'corechart']});
-    google.setOnLoadCallback(drawChart);
-    function drawChart() {
-      var classicChart;
-      var classicDiv = document.getElementById('classic');
-      var data = new google.visualization.DataTable();
-      data.addColumn('date', 'Month');
-      data.addColumn('number', "Raglan Road");
-      data.addColumn('number', "GingerMc");
-      data.addColumn('number', "Lucayan");
-
-      data.addRows([
-        [new Date(2014, 0),  -.5,  5, 20],
-        [new Date(2014, 1),   .4,  8.7, 20],
-        [new Date(2014, 2),   .5,   12, 20],
-        [new Date(2014, 3),  2.9, 15.3, 20],
-        [new Date(2014, 4),  6.3, 18.6, 20],
-        [new Date(2014, 5),    9, 20.9, 20],
-        [new Date(2014, 6), 10.6, 19.8, 20],
-        [new Date(2014, 7), 10.3, 16.6, 20],
-        [new Date(2014, 8),  7.4, 13.3, 20],
-        [new Date(2014, 9),  4.4,  9.9, 20],
-        [new Date(2014, 10), 1.1,  6.6, 20],
-        [new Date(2014, 11), -.2,  4.5, 20]
-      ]);
-      var classicOptions = {
-        width: 1300,
-        height: 500,
-        backgroundColor: '#f1f8e9',
-        // Gives each series an axis that matches the vAxes number below.
-        series: {
-          0: {targetAxisIndex: 0},
-          1: {targetAxisIndex: 1}
-        },
-        vAxes: {
-          // Adds titles to each axis.
-          0: {title: 'ROI'},
-        },
-        hAxis: {
-            ticks: [new Date(2014, 0), new Date(2014, 1), new Date(2014, 2), new Date(2014, 3),
-                    new Date(2014, 4),  new Date(2014, 5), new Date(2014, 6), new Date(2014, 7),
-                    new Date(2014, 8), new Date(2014, 9), new Date(2014, 10), new Date(2014, 11)
-                   ]
-          },
-        vAxis: {
-          viewWindow: {
-            max: 40
-          }
-        }
-      };
-	  classicChart = new google.visualization.LineChart(classicDiv);
-      classicChart.draw(data, classicOptions);
-    }
-    </script>
-					<!-- /.panel-heading -->
 					<div class="panel-body">
 						<div id="classic"></div>
 					</div>
 					<!-- /.panel-body -->
 				</div>
-			</div>
-			<!-- /.col-lg-4 -->
-		</div>
-		<!-- /#page-wrapper -->
+				<script>
+					google.load('visualization', '1.1', {
+						packages : [ 'line', 'corechart' ]
+					});
+					google.setOnLoadCallback(drawChart);
+					function drawChart() {
+						var classicChart;
+						var classicDiv = document.getElementById('classic');
+						var data = new google.visualization.DataTable();
+						data.addColumn('date', 'Month');
+						data.addColumn('number', "Raglan Road");
+						data.addColumn('number', "GingerMc");
+						data.addColumn('number', "Lucayan");
 
+						data.addRows([ [ new Date(2015, 0), 0, 0, 0 ],
+								[ new Date(2015, 1), 532, 0, 0 ],
+								[ new Date(2015, 2), 559, 30, 0 ],
+								[ new Date(2015, 3), 390, 4, 55 ] ]);
+						var classicOptions = {
+							width : 600,
+							height : 500,
+							backgroundColor : '#f1f8e9',
+							// Gives each series an axis that matches the vAxes number below.
+							series : {
+								0 : {
+									targetAxisIndex : 0
+								}
+							},
+							vAxes : {
+								// Adds titles to each axis.
+								0 : {
+									title : 'ROI'
+								},
+							},
+							hAxis : {
+								ticks : [ new Date(2015, 0), new Date(2015, 1),
+										new Date(2015, 2), new Date(2015, 3),
+										new Date(2015, 4), new Date(2015, 5),
+										new Date(2015, 6), new Date(2015, 7),
+										new Date(2015, 8), new Date(2015, 9),
+										new Date(2015, 10), new Date(2015, 11) ]
+							},
+							vAxis : {
+								viewWindow : {
+									max : 600
+								}
+							}
+						};
+						classicChart = new google.visualization.LineChart(
+								classicDiv);
+						classicChart.draw(data, classicOptions);
+					}
+				</script>
+				<!-- /.col-lg-4 -->
+			</div>
+		</div>
 	</div>
 	<!-- /#wrapper -->
 

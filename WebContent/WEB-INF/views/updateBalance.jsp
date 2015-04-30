@@ -25,6 +25,17 @@ body {
 	background-color: #f5f5f5;
 }
 
+#full-screen-background-image {
+	z-index: -999;
+	min-height: 100%;
+	min-width: 1024px;
+	width: 100%;
+	height: auto;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
 .form-signin {
 	max-width: 300px;
 	padding: 19px 29px 29px;
@@ -52,6 +63,8 @@ body {
 </style>
 </head>
 <body>
+<img src="bootstrap/img/bookies.jpg"
+		id="full-screen-background-image" />
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 				<div class="container">
 					<div class="navbar-header">
@@ -66,18 +79,8 @@ body {
 					</div>
 					<div id="navbar" class="navbar-collapse collapse">
 						<ul class="nav navbar-nav">
-							<li class="active"><a href="">Profile</a></li>
+							<li><a href="profile.html">Profile</a></li>
 							<li><a href="contact.html">Contact</a></li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle"
-								data-toggle="dropdown" role="button" aria-expanded="false">Options
-									<span class="caret"></span>
-							</a>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="updateBalance.html">Add Cash</a></li>
-									<li><a href="strategyChoice.html">Add Strategy</a></li>
-									<li><a href="creditcard.html">Add Card</a></li>
-									<li><a href="${pageContext.request.contextPath}/logout.html">Logout</a></li>
-								</ul></li>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
 								<li><a ><i class="glyphicon glyphicon-user"></i>

@@ -108,7 +108,7 @@ public class GingerMc implements IStrategy {
 		order.setSide("LAY");
 		order.setSize(size);
 		order.setExp_winnigs(pool*.1);
-		order.setBspLiability((runner.getEx().getAvailableToLay().get(0).getPrice())*size);
+		order.setBspLiability(((runner.getEx().getAvailableToLay().get(0).getPrice())*size)-size);
 		order.setOrderType(instruction.getOrderType().toString());
 		order.setPlacedDate(new Date());
 		return order;

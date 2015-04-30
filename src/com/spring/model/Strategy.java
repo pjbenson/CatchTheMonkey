@@ -56,6 +56,9 @@ public class Strategy implements Serializable{
 	public void addToPool(Double pool) {
 		this.pool = this.pool+pool;
 	}
+	public void removeFromPool(Double value){
+		this.pool = this.pool - value;
+	}
 	public Integer getId() {
 		return id;
 	}

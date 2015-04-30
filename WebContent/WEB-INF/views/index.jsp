@@ -21,13 +21,57 @@
 	type="text/javascript"></script>
 <link href="bootstrap/dist/css/carousel.css" rel="stylesheet"
 	type="text/css">
-	<style type="text/css">
+<style type="text/css">
 .slider-size {
-height: 400px; /* This is your slider height */
+	height: 400px; /* This is your slider height */
 }
+
 .carousel {
-width:100%; 
-margin:0 auto; /* center your carousel if other than 100% */ 
+	width: 100%;
+	margin: 0 auto; /* center your carousel if other than 100% */
+}
+</style>
+<style>
+div.img {
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid #0000ff;
+	height: auto;
+	width: auto;
+	float: left;
+	text-align: center;
+}
+
+body {
+	background-color: #f5f5f5;
+}
+
+#full-screen-background-image {
+	z-index: -999;
+	min-height: 100%;
+	min-width: 1024px;
+	width: 100%;
+	height: auto;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+div.img img {
+	display: inline;
+	margin: 5px;
+	border: 1px solid #ffffff;
+}
+
+div.img a:hover img {
+	border: 1px solid #0000ff;
+}
+
+div.desc {
+	text-align: center;
+	font-weight: normal;
+	width: 120px;
+	margin: 5px;
 }
 </style>
 </head>
@@ -35,8 +79,6 @@ margin:0 auto; /* center your carousel if other than 100% */
 ================================================== -->
 <body>
 	<div class="navbar-wrapper">
-		<div class="container">
-
 			<nav class="navbar navbar-inverse navbar-fixed-top">
 				<div class="container">
 					<div class="navbar-header">
@@ -79,7 +121,6 @@ margin:0 auto; /* center your carousel if other than 100% */
 				</div>
 			</nav>
 
-		</div>
 	</div>
 
 
@@ -98,12 +139,15 @@ margin:0 auto; /* center your carousel if other than 100% */
 				<div class="container">
 					<div class="carousel-caption">
 						<h1>Welcome to Catch The Monkey</h1>
-						<p><b>You can avail of a range of strategies that vary in risk,
-							return on investment (ROI) and complexity. All strategies are designed
-							to generate profit through different means via the Betfair
-							exchange.</b></p>
 						<p>
-							<a class="btn btn-lg btn-primary" href="register.html" role="button">Sign up today</a>
+							<b>You can avail of a range of strategies that vary in risk,
+								return on investment (ROI) and complexity. All strategies are
+								designed to generate profit through different means via the
+								Betfair exchange.</b>
+						</p>
+						<p>
+							<a class="btn btn-lg btn-primary" href="register.html"
+								role="button">Sign up today</a>
 						</p>
 					</div>
 				</div>
@@ -112,14 +156,16 @@ margin:0 auto; /* center your carousel if other than 100% */
 				<img src="bootstrap/img/slide3.gif" alt="Second slide">
 				<div class="container">
 					<div class="carousel-caption">
-					<h1>Investment</h1>
-						<p><b>Choose a strategy that best suits your risk profile and avail of monthly 
-						returns. The amount you invest is entirely up to you and you may retract
-						your investment at any point.</b> </p>
+						<h1>Investment</h1>
+						<p>
+							<b>Choose a strategy that best suits your risk profile and
+								avail of monthly returns. The amount you invest is entirely up
+								to you and you may retract your investment at any point.</b>
+						</p>
 						<p>
 							<a class="btn btn-lg btn-primary" href="register.html"
 								role="button">Sign up today</a>
-						</p>						
+						</p>
 					</div>
 				</div>
 			</div>
@@ -128,9 +174,12 @@ margin:0 auto; /* center your carousel if other than 100% */
 				<div class="container">
 					<div class="carousel-caption">
 						<h1>View Daily Statistics</h1>
-						<p><b>Strategy and user performance is represented via modern graphing tools and
-						charts. All charts can be filtered to monitor performance by month. Improve
-						your knowledge of strategies by analysing daily charts.</b></p>
+						<p>
+							<b>Strategy and user performance is represented via modern
+								graphing tools and charts. All charts can be filtered to monitor
+								performance by month. Improve your knowledge of strategies by
+								analysing daily charts.</b>
+						</p>
 						<p>
 							<a class="btn btn-lg btn-primary" href="register.html"
 								role="button">Sign up today</a>
@@ -157,98 +206,108 @@ margin:0 auto; /* center your carousel if other than 100% */
 		<!-- Three columns of text below the carousel -->
 		<div class="row">
 			<div class="col-lg-4">
-				<img class="img-circle"
-					src="bootstrap/img/raglanroad.jpg"
+				<img class="img-circle" src="bootstrap/img/raglanroad.jpg"
 					alt="Generic placeholder image"
 					style="width: 140px; height: 140px;">
 				<h2>Raglan Road</h2>
-				<p>Raglan Road is a high risk strategy that seeks 
-				to generate profit using hedging techniques. Users must be aware of the risks.
+				<p>Raglan Road is a high risk strategy that seeks to generate
+					profit using hedging techniques. Users must be aware of the risks.
 				</p>
 				<p>
-					<a class="btn btn-large btn-success" href="strategyChoice.html" role="button">View details
-						&raquo;</a>
+					<a class="btn btn-large btn-success" href="strategyChoice.html"
+						role="button">View details &raquo;</a>
 				</p>
 			</div>
 			<!-- /.col-lg-4 -->
 			<div class="col-lg-4">
-				<img class="img-circle"
-					src="bootstrap/img/lucayan.png"
+				<img class="img-circle" src="bootstrap/img/lucayan.png"
 					alt="Generic placeholder image"
 					style="width: 140px; height: 140px;">
 				<h2>Lucayan</h2>
-				<p>Lucayan is a medium risk strategy and is an extension of Raglan Road.
-				Users are exposed to less risk and trading activity is less frequent.</p>
+				<p>Lucayan is a medium risk strategy and is an extension of
+					Raglan Road. Users are exposed to less risk and trading activity is
+					less frequent.</p>
 				<p>
-					<a class="btn btn-large btn-success" href="strategyChoice.html" role="button">View details
-						&raquo;</a>
+					<a class="btn btn-large btn-success" href="strategyChoice.html"
+						role="button">View details &raquo;</a>
 				</p>
 			</div>
 			<!-- /.col-lg-4 -->
 			<div class="col-lg-4">
-				<img class="img-circle"
-					src=bootstrap/img/ginger.jpg
+				<img class="img-circle" src=bootstrap/img/ginger.jpg
 					alt="Generic placeholder image"
 					style="width: 140px; height: 140px;">
 				<h2>GingerMc</h2>
-				<p>GingerMc is a low risk strategy. All trades are catious in 
-				nature and users face minimal exposure to risk but risk is not erradicated.</p>
+				<p>GingerMc is a low risk strategy. All trades are catious in
+					nature and users face minimal exposure to risk but risk is not
+					erradicated.</p>
 				<p>
-					<a class="btn btn-large btn-success" href="strategyChoice.html" role="button">View details
-						&raquo;</a>
+					<a class="btn btn-large btn-success" href="strategyChoice.html"
+						role="button">View details &raquo;</a>
 				</p>
 			</div>
 			<!-- /.col-lg-4 -->
 		</div>
 		<!-- /.row -->
-		
+
 		<hr class="featurette-divider">
 
 		<div class="row featurette">
 			<div class="col-md-7">
 				<h2 class="featurette-heading">
-					A structured investment approach. <span class="text-muted">The next generation in investment.</span>
+					A structured investment approach. <span class="text-muted">The
+						next generation in investment.</span>
 				</h2>
-				<p class="lead">Catch The Monkey allows you to take the stress out of manual trading
-				on Betfair. With high analytical research and quantitative methods each strategy
-				provides customers with all the advantages of porfolio investment from a stockbroker with the added advantage of greater visibilty.</p>
+				<p class="lead">Catch The Monkey allows you to take the stress
+					out of manual trading on Betfair. With high analytical research and
+					quantitative methods each strategy provides customers with all the
+					advantages of porfolio investment from a stockbroker with the added
+					advantage of greater visibilty.</p>
 			</div>
-			
 			<div class="col-md-5">
-				<img class="featurette-image img-responsive" width="700" height="600"
-					src="bootstrap/img/pricevolume.png" alt="Generic placeholder image">
+				<img class="featurette-image img-responsive" width="700"
+					height="600" align="bottom"  src="bootstrap/img/betfair.png"
+					alt="Generic placeholder image">
 			</div>
 		</div>
 
+		<hr>
 
 		<div class="row featurette">
 			<div class="col-md-5">
-				<img class="featurette-image img-responsive" width="700" height="700"
-					src="bootstrap/img/betfair.png" alt="Generic placeholder image">
+				<img class="featurette-image img-rounded img-responsive" width="700"
+					height="700" src="bootstrap/img/betfair.png"
+					alt="Generic placeholder image">
 			</div>
 			<div class="col-md-7">
 				<h2 class="featurette-heading">
-					Hassle free, monthly returns. <span class="text-muted">Customer orientation.</span>
+					Hassle free, monthly returns. <span class="text-muted">Customer
+						orientation.</span>
 				</h2>
-				<p class="lead">All strategies on Catch The Monkey are executed automatically via the 
-				Betfair exchange which means that customers simply sign up to a strategy or strategies of their choice and 
-				sit back and reap the rewards of DAILY returns.</p>
+				<p class="lead">All strategies on Catch The Monkey are executed
+					automatically via the Betfair exchange which means that customers
+					simply sign up to a strategy or strategies of their choice and sit
+					back and reap the rewards of DAILY returns.</p>
 			</div>
 		</div>
 
+		<hr>
 
 		<div class="row featurette">
 			<div class="col-md-7">
 				<h2 class="featurette-heading">
 					Maximum visibilty, less fees. <span class="text-muted">Control.</span>
 				</h2>
-				<p class="lead">Maximum vivsibility of daily positions on Betfair are accessible on
-				each strategies home page, providing customers with live updates every day and charted progess
-				of daily positions. All this for just a 5% fee, a lot cheaper than your stockbroker!!</p>
+				<p class="lead">Maximum vivsibility of daily positions on
+					Betfair are accessible on each strategies home page, providing
+					customers with live updates every day and charted progess of daily
+					positions. All this for just a 5% fee, a lot cheaper than your
+					stockbroker!!</p>
 			</div>
 			<div class="col-md-5">
-				<img class="featurette-image img-responsive" width="700" height="700"
-					src="bootstrap/img/charts.png" alt="Generic placeholder image">
+				<img class="featurette-image img-responsive" width="700"
+					height="500" src="bootstrap/img/roi.png"
+					alt="Generic placeholder image">
 			</div>
 		</div>
 

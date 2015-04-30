@@ -57,7 +57,7 @@ import com.spring.service.UserService;
 import com.spring.test.UserUIObject;
 
 @Controller
-@SessionAttributes({"strategy", "order", "runners", "gmLineChart", "gMcBarChart"})
+@SessionAttributes({"strategy", "order", "runners", "gmLineChart", "gMcBarChart", "gMcList"})
 public class GingerMcController {
 
 	@Autowired
@@ -77,8 +77,10 @@ public class GingerMcController {
 
 	@RequestMapping(value="gingermc", method = RequestMethod.GET)
 	public ModelAndView showGingerMc(ModelMap model){
-		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		User u = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		User user = userService.getUser(u.getUserId());
 		if(user==null)return new ModelAndView("redirect:/loginform.html");
+		if(user.getAccount().getGingerRegisterDate()==null)return new ModelAndView("redirect:/strategyChoice.html");
 		String lineChart = (String) RequestContextHolder.currentRequestAttributes().getAttribute("gmLineChart", RequestAttributes.SCOPE_SESSION);
 		String barChart = (String) RequestContextHolder.currentRequestAttributes().getAttribute("gMcBarChart", RequestAttributes.SCOPE_SESSION);
 		if(lineChart==null)model.put("gmLineChart", createLineChart(3).toURLString());
@@ -87,7 +89,7 @@ public class GingerMcController {
 		Strategy gingermc = strategyService.getStrategy(2);
 		PieChart pieChart = createPieChart();
 
-		model.put("list", getDataForRunnerTable());
+		model.put("gMcList", getDataForRunnerTable());
 		model.put("strategy", gingermc);
 		model.addAttribute("pieChart", pieChart.toURLString());
 		model.addAttribute("signUpDate", getDateUserInvested());
@@ -115,6 +117,23 @@ public class GingerMcController {
 			strategyService.addAccountToStrategy(gingerMc);
 			user.getAccount().addToGingermc(amount);
 			user.getAccount().setBalance(user.getAccount().getBalance() - amount);
+			userService.updateBalance(user);
+			model.put("user", user);
+			return new ModelAndView("redirect:/gingermc.html");
+		}
+	}
+	
+	@RequestMapping(value = "/removeGmcCash", method = RequestMethod.POST)
+	public ModelAndView removeCashFromPool(@RequestParam("amount") Double amount, ModelMap model){
+		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
+		Strategy gingermc = strategyService.getStrategy(2);
+		if(amount>user.getAccount().getGingermc()){
+			return new ModelAndView("redirect:/gingermc.html");
+		}else{
+			gingermc.removeFromPool(amount);
+			strategyService.addAccountToStrategy(gingermc);
+			user.getAccount().removeFromGingerMc(amount);
+			user.getAccount().setBalance(user.getAccount().getBalance() + amount);
 			userService.updateBalance(user);
 			model.put("user", user);
 			return new ModelAndView("redirect:/gingermc.html");
@@ -201,7 +220,7 @@ public class GingerMcController {
 			}
 		}
 
-		final Line line = Plots.newLine(DataUtil.scaleWithinRange(-50,40,returns), BLUEVIOLET);
+		final Line line = Plots.newLine(DataUtil.scaleWithinRange(-60,40,returns), BLUEVIOLET);
 		line.setColor(BLACK);
 		final LineChart chart = GCharts.newLineChart(line);
 		chart.setSize(650, 450);
@@ -215,7 +234,7 @@ public class GingerMcController {
 
 		chart.setTitle("€"+monthlyReturn+"|(per €100 invested in "+months[month]+")", BLACK, 14);
 		chart.addXAxisLabels(AxisLabelsFactory.newAxisLabels(dates));
-		chart.addYAxisLabels(AxisLabelsFactory.newNumericRangeAxisLabels(-50, 40));
+		chart.addYAxisLabels(AxisLabelsFactory.newNumericRangeAxisLabels(-60, 40));
 		chart.setBackgroundFill(Fills.newSolidFill(ALICEBLUE));
 		LinearGradientFill fill = Fills.newLinearGradientFill(0, LAVENDER, 10);
 		fill.addColorAndOffset(WHITE, 0);
@@ -311,8 +330,17 @@ public class GingerMcController {
 
 	private Double getUserPercentageOfTotalReturn(){
 		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_SESSION);
-		if(user == null || user.getAccount().getGingerReturns() == null)return 0.0;
-		return user.getAccount().getGingerReturns();
+		if(user == null || user.getAccount().getGingerReturns()== null)return 0.0;
+		Double total = 0.0;
+		for(Result result: resultsService.getResults()){
+			if(user.getAccount().getGingerRegisterDate().after(result.getDate()) && result.getStrategyId()==2){
+				total += result.getAmount();
+			}
+		}
+		
+		Strategy gMc = strategyService.getStrategy(2);
+		Double userPercentage = (double) Math.round((user.getAccount().getRaglanroad()/gMc.getPool())*total);
+		return userPercentage;
 	}
 
 	private String getDateUserInvested(){

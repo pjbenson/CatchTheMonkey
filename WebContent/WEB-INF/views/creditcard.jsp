@@ -31,6 +31,17 @@ body {
 	background-color: #f5f5f5;
 }
 
+#full-screen-background-image {
+	z-index: -999;
+	min-height: 100%;
+	min-width: 1024px;
+	width: 100%;
+	height: auto;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
 .form-signin {
 	max-width: 300px;
 	padding: 19px 29px 29px;
@@ -64,6 +75,8 @@ body {
 </head>
 
 <body>
+<img src="bootstrap/img/punch.jpg"
+		id="full-screen-background-image" />
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
@@ -78,8 +91,7 @@ body {
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 						<ul class="nav navbar-nav">
-							<li class="active"><a href="index.html">Home</a></li>
-								<li><a href="loginform.html">Login</a></li>
+							<li><a href="profile.html">My Profile</a></li>
 							<li><a href="contact.html">Contact</a></li>
 						</ul>
 					</div>
